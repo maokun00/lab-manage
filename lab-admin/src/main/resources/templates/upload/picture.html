@@ -1,0 +1,43 @@
+@layout("/common/_container.html"){
+<div class="row">
+	<div class="col-sm-12">
+		<div class="ibox float-e-margins">
+			<div class="ibox-title">
+				<h5>推荐图片</h5>
+			</div>
+			<div class="ibox-content">
+				<div class="row row-lg">
+					<div class="col-sm-12">
+						<div class="row">
+							<div class="col-lg-12 col-sm-12">
+								<div class="hidden-xs" id="managerTableToolbar" role="group">
+									<button type="button" class="btn btn-primary" onclick="MgrUser.openAddMgr()">上  传</button>
+									<button type="button" class="btn btn-primary" onclick="MgrUser.openChangeUser()">编辑内容</button>
+									<button type="button" class="btn btn-danger" onclick="MgrUser.unfreeze()">启  用</button>
+									<button type="button" class="btn btn-danger" onclick="MgrUser.freezeAccount()">禁  用</button>
+								</div>
+								<table id="managerTable" data-mobile-responsive="true" data-click-to-select="true">
+									<thead>
+									<tr>
+										<th data-field="selectItem" data-checkbox="true"></th>
+									</tr>
+									</thead>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="${ctxPath}/static/modular/upload/picture.js"></script>
+<script>
+    laydate.render({
+        elem: '#beginTime'
+    });
+    laydate.render({
+        elem: '#endTime'
+    });
+</script>
+@}

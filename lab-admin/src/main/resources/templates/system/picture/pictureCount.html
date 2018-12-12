@@ -1,0 +1,76 @@
+@layout("/common/_container.html"){
+<div class="row">
+	<div class="col-sm-12">
+		<div class="ibox float-e-margins">
+			<div class="ibox-title">
+				<h5>图片统计</h5>
+			</div>
+			<div class="ibox-content">
+				<div class="row row-lg">
+					<div class="col-sm-12">
+						<div class="row">
+							<div class="col-lg-12 col-sm-12">
+								<div class="row">
+									<div class="col-lg-10 col-sm-9">
+										<div class="row">
+											<div class="col-lg-2 col-sm-2">
+												<label for="pictureName">图片名：</label>
+												<input id="pictureName" class="form-control" name="pictureName">
+											</div>
+											<div class="col-lg-2 col-sm-2">
+												<label for="userName">作者：</label>
+												<input id="userName" class="form-control" name="userName">
+											</div>
+											<div class="col-lg-2 col-sm-2">
+												<label>开始日期：</label>
+												<input id="beginTime" class="form-control"  name="开始日期" />
+											</div>
+											<div class="col-lg-2 col-sm-2">
+												<label>结束日期：</label>
+												<input id="endTime" class="form-control"  name="结束日期" />
+											</div>
+											<div class="col-lg-2 col-sm-2">
+												<label>方式</label>
+												<select class="form-control" id="way">
+													<option value=""></option>
+													<option value="1">被收藏最多</option>
+													<option value="2">被点击最多</option>
+													<option value="3">被下载最多</option>
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="col-lg-2 col-sm-3">
+										<div class="row" style="float: right">
+											<div class="col-lg-12 col-sm-12" >
+												<button type="button" class="btn btn-default btn-outline" onclick="MgrUser.search()">搜 索</button>
+												<button type="button" class="btn btn-default btn-outline" onclick="MgrUser.resetSearch()">重 置</button>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="hidden-xs" id="managerTableToolbar" role="group">
+									<button type="button" class="btn btn-primary" onclick="MgrUser.openPicture()">查看图片</button>
+									<!--<button type="button" class="btn btn-warning" onclick="MgrUser.unfreeze()">启  用</button>-->
+									<!--<button type="button" class="btn btn-warning" onclick="MgrUser.freezeAccount()">禁  用</button>-->
+									<!--<button type="button" class="btn btn-danger" onclick="MgrUser.resetPwd()">重置密码</button>-->
+								</div>
+								<table id="managerTable"/>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="${ctxPath}/static/modular/system/picture/pictureCount.js"></script>
+<script>
+    laydate.render({
+        elem: '#beginTime'
+    });
+    laydate.render({
+        elem: '#endTime'
+    });
+</script>
+@}

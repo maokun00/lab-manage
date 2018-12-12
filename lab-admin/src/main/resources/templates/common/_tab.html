@@ -1,0 +1,74 @@
+<nav class="navbar-default navbar-static-side" role="navigation">
+    <div class="nav-close"><i class="fa fa-times-circle"></i>
+    </div>
+    <div class="sidebar-collapse">
+        <ul class="nav" id="side-menu">
+            <li class="nav-header">
+                <div class="dropdown profile-element">
+                    <span><img alt="image" class="img-circle"
+                               @if(isEmpty(avatar)){
+                                    src="${ctxPath}/static/img/girl.gif"
+                               @}else{
+                                    src="${ctxPath}/kaptcha/${avatar}"
+                               @}
+                               width="64px" height="64px"/></span>
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                        <span class="clear">
+                       <span class="block m-t-xs"><strong class="font-bold">欢迎登录</strong></span>
+                        <span class="text-muted text-xs block">管理员<b class="caret"></b></span>
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu m-t-xs">
+                        <!--<li><a class="J_menuItem" href="${ctxPath}/mgr/user_info">个人资料</a></li>-->
+                        <!--<li><a class="J_menuItem" href="${ctxPath}/mgr/user_chpwd">修改密码</a></li>-->
+                        <li class="divider"></li>
+                        <li><a href="${ctxPath}/logout">安全退出</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="logo-element">GS
+                </div>
+            </li>
+            
+            <li>
+                <a class="J_menuItem" href="${ctxPath}/upload/list" name="tabMenuItem">
+                    <i class="fa s-skin-3"></i>
+                    <span class="nav-label">上传推荐图片</span>
+                </a>
+                <a href="#">
+                    <i class="fa s-skin-3"></i>
+                    <span class="nav-label">图片管理</span>
+                    <span class="fa arrow"></span>
+                </a>
+                <ul class="nav nav-second-level">
+                    <li>
+                        <a class="J_menuItem" href="${ctxPath}/pictureAuditing/list" name="tabMenuItem">图片审核</a>
+                        <a class="J_menuItem" href="${ctxPath}/pictureCount/list" name="tabMenuItem">图片统计</a>
+                    </li>
+                </ul>
+
+                <a href="#">
+                    <i class="fa s-skin-3"></i>
+                    <span class="nav-label">系统管理</span>
+                    <span class="fa arrow"></span>
+                </a>
+                <ul class="nav nav-second-level">
+                    <li>
+                        <a class="J_menuItem" href="${ctxPath}/user/list" name="tabMenuItem">管理员列表</a>
+                        <a class="J_menuItem" href="${ctxPath}/member/list" name="tabMenuItem">用户管理</a>
+                        <a class="J_menuItem" href="${ctxPath}/memberCount/list" name="tabMenuItem">用户统计</a>
+                        <a class="J_menuItem" href="${ctxPath}/userActivityCount/list" name="tabMenuItem">用户活跃度统计</a>
+                    </li>
+                    <!--<li>-->
+                        <!--<a href="#">123asd <span class="fa arrow"></span></a>-->
+                        <!--<ul class="nav nav-third-level">-->
+                            <!--<li>-->
+                                <!--<a class="J_menuItem" href="${ctxPath}/asd" name="tabMenuItem">zxc</a>-->
+                            <!--</li>-->
+                        <!--</ul>-->
+                    <!--</li>-->
+                </ul>
+            </li>
+        </ul>
+    </div>
+</nav>

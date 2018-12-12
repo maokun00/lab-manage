@@ -1,0 +1,31 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+	<div class="ibox-content">
+		<div class="form-horizontal" id="userInfoForm">
+
+			<input type="hidden" id="id" name="id" value="${member.id}">
+
+			<div class="row">
+				<div class="col-sm-6 b-r">
+					<label>请输入会员等级 （1-10）</label>
+					<input id="level" class="form-control" name="level" value="${member.level}" underline="true"/>
+				</div>
+			</div>
+
+			<div class="row btn-group-m-t">
+				<div class="col-sm-10">
+					<button type="button" id="ensure" class="btn btn-info" onclick="UserInfoDlg.editSubmit()">提交</button>
+					<button type="button" id="cancel" class="btn btn-danger" onclick="UserInfoDlg.close()">取消</button>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>
+<script src="${ctxPath}/static/modular/system/member/user_info.js"></script>
+<script>
+    laydate.render({
+        elem: '#birthday'
+    });
+</script>
+@}

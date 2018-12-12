@@ -1,0 +1,98 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+	<div class="ibox-content">
+		<div class="form-horizontal" id="userInfoForm">
+
+			<input type="hidden" id="pictureId" value="${picture.pictureId}">
+
+			<div class="row">
+				<div class="col-sm-6 b-r">
+					<label>图片标题</label>
+					<input id="pictureName" value="${picture.pictureName}" class="form-control" name="pictureName" underline="true"/>
+
+					<label>图片备注</label>
+					<textarea id="remark" class="form-control" name="remark">${picture.remark}</textarea>
+
+					<label>上传图片</label>
+					<input id="uploadFile" value="${picture.path}" type="file" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg"  class="form-control" name="uploadFile" onclick="UserInfoDlg.upload()"/>
+
+					<div id="fileDetail">
+						<img id="filePath" style="width: 300px;height: 300px"  src="${filePath}" alt="图片无法加载"/>
+						<input type="hidden" id="path">
+					</div>
+
+				</div>
+
+
+				<div class="col-sm-6">
+					<div id="driverInfoContent">
+
+						<label>是否推荐</label>
+						<select id="recommend" class="form-control" name="recommend" underline="true">
+							<option
+									@if(picture.status == 1){
+										selected="selected"
+									@}
+									value="1">推荐</option>
+							<option
+									@if(picture.status == 0){
+										selected="selected"
+									@}
+									value="0">不推荐</option>
+						</select>
+
+						<label>分类</label>
+						<select id="category" class="form-control" name="category" underline="true">
+							<option
+									@if(picture.category == 0){
+										selected="selected"
+									@}
+									value="0">尾灯PP</option>
+							<option
+									@if(picture.category == 1){
+										selected="selected"
+									@}
+									value="1">故障PP</option>
+							<option
+									@if(picture.category == 2){
+										selected="selected"
+									@}
+									value="2">吐槽PP</option>
+							<option
+									@if(picture.category == 3){
+										selected="selected"
+									@}
+									value="3">其他PP</option>
+							<option
+									@if(picture.category == 4){
+									selected="selected"
+									@}
+									value="4">不分类</option>
+						</select>
+
+					</div>
+				</div>
+			</div>
+
+			<div class="row btn-group-m-t">
+				<div class="col-sm-10">
+					<button type="button" id="ensure" class="btn btn-info" onclick="UserInfoDlg.submit()">提交</button>
+					<button type="button" id="cancel" class="btn btn-danger" onclick="UserInfoDlg.close()">取消</button>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>
+<style>
+	.form-control{
+		margin-bottom: 15px;
+	}
+</style>
+<script src="${ctxPath}/static/modular/upload/picture_info.js"></script>
+<script>
+    laydate.render({
+        elem: '#birthday'
+    });
+</script>
+@}
