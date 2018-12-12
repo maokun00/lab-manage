@@ -5,7 +5,7 @@ package com.lab.manage.domain;
  */
 public class SysUser extends BaseDomain {
 
-    private Integer userId;
+    private Integer id;
 
     private String username;
 
@@ -13,17 +13,11 @@ public class SysUser extends BaseDomain {
 
     private String nickname;
 
+    private String mobile;
+
     private String salt;
 
     private Integer status;
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
 
     public String getUsername() {
         return username;
@@ -63,5 +57,21 @@ public class SysUser extends BaseDomain {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 }

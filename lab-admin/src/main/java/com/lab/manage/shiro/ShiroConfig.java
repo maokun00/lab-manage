@@ -49,7 +49,8 @@ public class ShiroConfig {
         filterMap.put("/static/**", "anon");
         filterMap.put("login_error.html","anon");
         filterMap.put("/test", "anon");
-        filterMap.put("/index", "anon");
+        filterMap.put("/login/submit", "anon");
+        filterMap.put("/register/submit", "anon");
         filterMap.put("/login", "anon");
         filterMap.put("/logout", "anon");
         filterMap.put("/kaptcha", "anon");

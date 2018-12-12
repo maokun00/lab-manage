@@ -1,5 +1,6 @@
 package com.lab.manage.shiro;
 
+import com.lab.manage.domain.SysUser;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.session.Session;
@@ -27,13 +28,13 @@ public class ShiroUtils {
         return SecurityUtils.getSubject();
     }
 
-//    public static SysUser getUserEntity() {
-//        return (SysUser)SecurityUtils.getSubject().getPrincipal();
-//    }
-//
-//    public static Integer getUserId() {
-//        return getUserEntity().getUserId();
-//    }
+    public static SysUser getUserEntity() {
+        return (SysUser)SecurityUtils.getSubject().getPrincipal();
+    }
+
+    public static Integer getUserId() {
+        return getUserEntity().getId();
+    }
 
     public static void setSessionAttribute(Object key, Object value) {
         getSession().setAttribute(key, value);
@@ -50,15 +51,5 @@ public class ShiroUtils {
     public static void logout() {
         SecurityUtils.getSubject().logout();
     }
-
-    public static String getKaptcha(String key) {
-        Object kaptcha = getSessionAttribute(key);
-        if(kaptcha == null){
-            throw new RuntimeException("验证码已失效");
-        }
-        getSession().removeAttribute(key);
-        return kaptcha.toString();
-    }
-
 
 }
