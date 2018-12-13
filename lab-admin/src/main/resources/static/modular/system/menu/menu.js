@@ -8,6 +8,7 @@ var Menu = {
     layerIndex: -1
 };
 
+
 /**
  * 初始化表格的列
  */
@@ -16,13 +17,9 @@ Menu.initColumn = function () {
         {field: 'selectItem', radio: true},
         {title: 'id', field: 'id', visible: false, align: 'center', valign: 'middle'},
         {title: '菜单名称', field: 'name', align: 'center', valign: 'middle', sortable: true},
-        {title: '菜单编号', field: 'code', align: 'center', valign: 'middle', sortable: true},
-        {title: '菜单父编号', field: 'pcode', align: 'center', valign: 'middle', sortable: true},
+        {title: '授权', field: 'perms', align: 'center', valign: 'middle', sortable: true},
         {title: '请求地址', field: 'url', align: 'center', valign: 'middle', sortable: true},
-        {title: '排序', field: 'num', align: 'center', valign: 'middle', sortable: true},
-        {title: '层级', field: 'levels', align: 'center', valign: 'middle', sortable: true},
-        {title: '是否是菜单', field: 'isMenuName', align: 'center', valign: 'middle', sortable: true},
-        {title: '状态', field: 'statusName', align: 'center', valign: 'middle', sortable: true}]
+        {title: '排序', field: 'orderNum', align: 'center', valign: 'middle', sortable: true}]
     return columns;
 };
 
@@ -31,7 +28,7 @@ Menu.initColumn = function () {
  * 检查是否选中
  */
 Menu.check = function () {
-    var selected = $('#' + this.id).bootstrapTreeTable('getSelections');
+    var selected = $('#' + this.id).bootstrapTable('getSelections');
     if (selected.length == 0) {
         Feng.info("请先选中表格中的某一记录！");
         return false;
@@ -45,13 +42,14 @@ Menu.check = function () {
  * 点击添加菜单
  */
 Menu.openAddMenu = function () {
+
     var index = layer.open({
         type: 2,
         title: '添加菜单',
-        area: ['830px', '450px'], //宽高
+        area: ['800px', '450px'], //宽高
         fix: false, //不固定
         maxmin: true,
-        content: Feng.ctxPath + '/menu/menu_add'
+        content: Feng.ctxPath + '/sys/menu/menu_add'
     });
     this.layerIndex = index;
 };
@@ -67,7 +65,7 @@ Menu.openChangeMenu = function () {
             area: ['800px', '450px'], //宽高
             fix: false, //不固定
             maxmin: true,
-            content: Feng.ctxPath + '/menu/menu_edit/' + this.seItem.id
+            content: Feng.ctxPath + '/sys/menu/menu_edit/' + this.seItem.id
         });
         this.layerIndex = index;
     }
@@ -106,14 +104,12 @@ Menu.search = function () {
     Menu.table.refresh({query: queryData});
 }
 
+
+
 $(function () {
     var defaultColunms = Menu.initColumn();
-    var table = new BSTreeTable(Menu.id, "/menu/list", defaultColunms);
-    table.setExpandColumn(2);
-    table.setIdField("id");
-    table.setCodeField("code");
-    table.setParentCodeField("pcode");
-    table.setExpandAll(true);
+    var table = new BSTable("menuTable", "/sys/menu/list", defaultColunms);
+    table.setPaginationType("server");
     table.init();
     Menu.table = table;
 });

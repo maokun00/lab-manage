@@ -3,44 +3,6 @@
  */
 var MenuInfoDlg = {
     menuInfoData: {},
-    ztreeInstance: null,
-    validateFields: {
-        name: {
-            validators: {
-                notEmpty: {
-                    message: '菜单名称不能为空'
-                }
-            }
-        },
-        code: {
-            validators: {
-                notEmpty: {
-                    message: '菜单编号不能为空'
-                }
-            }
-        },
-        pcodeName: {
-            validators: {
-                notEmpty: {
-                    message: '父菜单不能为空'
-                }
-            }
-        },
-        url: {
-            validators: {
-                notEmpty: {
-                    message: '请求地址不能为空'
-                }
-            }
-        },
-        num: {
-            validators: {
-                notEmpty: {
-                    message: '序号不能为空'
-                }
-            }
-        }
-    }
 };
 
 /**
@@ -50,26 +12,6 @@ MenuInfoDlg.clearData = function () {
     this.menuInfoData = {};
 }
 
-/**
- * 设置对话框中的数据
- *
- * @param key 数据的名称
- * @param val 数据的具体值
- */
-MenuInfoDlg.set = function (key, value) {
-    this.menuInfoData[key] = (typeof value == "undefined") ? $("#" + key).val() : value;
-    return this;
-}
-
-/**
- * 设置对话框中的数据
- *
- * @param key 数据的名称
- * @param val 数据的具体值
- */
-MenuInfoDlg.get = function (key) {
-    return $("#" + key).val();
-}
 
 /**
  * 关闭此对话框
@@ -78,98 +20,182 @@ MenuInfoDlg.close = function () {
     parent.layer.close(window.parent.Menu.layerIndex);
 }
 
-/**
- * 收集数据
- */
-MenuInfoDlg.collectData = function () {
-    this.set('id').set('name').set('code').set('pcode').set('url').set('num').set('levels').set('icon').set("ismenu");
-}
-
-/**
- * 验证数据是否为空
- */
-MenuInfoDlg.validate = function () {
-    $('#menuInfoForm').data("bootstrapValidator").resetForm();
-    $('#menuInfoForm').bootstrapValidator('validate');
-    return $("#menuInfoForm").data('bootstrapValidator').isValid();
-}
 
 /**
  * 提交添加用户
  */
 MenuInfoDlg.addSubmit = function () {
 
-    this.clearData();
-    this.collectData();
-
-    if (!this.validate()) {
+    var zTree = $.fn.zTree.getZTreeObj("parent");
+    var nodes = zTree.getSelectedNodes();
+    if(nodes.length == 0){
+        layer.alert('请选择父级菜单')
         return;
     }
+    var parentId = nodes[0].id;
+    var name = $("#menuName").val();
+    var type = $("#ismenu").val();
+    var perms = $("#perms").val();
+    var url = $("#url").val();
+    var orderNum = $("#orderNum").val();
 
-    //提交信息
-    var ajax = new $ax(Feng.ctxPath + "/menu/add", function (data) {
-        Feng.success("添加成功!");
-        window.parent.Menu.table.refresh();
-        MenuInfoDlg.close();
-    }, function (data) {
-        Feng.error("添加失败!" + data.responseJSON.message + "!");
-    });
-    ajax.set(this.menuInfoData);
-    ajax.start();
+    var form = {
+        parentId : parentId,
+        name : name,
+        type : type,
+        orderNum : orderNum,
+        perms :perms,
+        url : url
+    }
+
+    $.ajax({
+        type : "POST",
+        data : form,
+        url : "/sys/menu/add",
+        async : false,
+        success : function(data) {
+            if(data.status == 10000){
+                layer.alert('操作成功', {
+                    skin: 'layui-layer-molv' //样式类名
+                    ,closeBtn: 0
+                }, function(){
+                    window.parent.Menu.table.refresh();
+                    MenuInfoDlg.close();
+                });
+            }
+        },
+        error : function(error) {
+            layer.msg('系统错误！', {
+                icon : 2,
+                time : 1500
+            })
+        }
+    })
 }
 
 /**
  * 提交修改
  */
 MenuInfoDlg.editSubmit = function () {
+    var parentId;
+    var zTree = $.fn.zTree.getZTreeObj("parent");
+    var nodes = zTree.getSelectedNodes();
+    if(nodes.length == 0){
+        parentId = $("#parentId").val();
+    }else {
+        parentId = nodes[0].id;
+    }
+    var name = $("#menuName").val();
+    var type = $("#ismenu").val();
+    var perms = $("#perms").val();
+    var url = $("#url").val();
+    var orderNum = $("#orderNum").val();
+    var parent = $("#parentId").val();
 
-    this.clearData();
-    this.collectData();
-
-    if (!this.validate()) {
-        return;
+    var form = {
+        parentId : parentId,
+        name : name,
+        type : type,
+        orderNum : orderNum,
+        perms :perms,
+        url : url
     }
 
-    //提交信息
-    var ajax = new $ax(Feng.ctxPath + "/menu/edit", function (data) {
-        Feng.success("修改成功!");
-        window.parent.Menu.table.refresh();
-        MenuInfoDlg.close();
-    }, function (data) {
-        Feng.error("修改失败!" + data.responseJSON.message + "!");
-    });
-    ajax.set(this.menuInfoData);
-    ajax.start();
+    $.ajax({
+        type : "POST",
+        data : form,
+        url : "/sys/menu/edit",
+        async : false,
+        success : function(data) {
+            if(data.status == 10000){
+                layer.alert('操作成功', {
+                    skin: 'layui-layer-molv' //样式类名
+                    ,closeBtn: 0
+                }, function(){
+                    window.parent.Menu.table.refresh();
+                    MenuInfoDlg.close();
+                });
+            }
+        },
+        error : function(error) {
+            layer.msg('系统错误！', {
+                icon : 2,
+                time : 1500
+            })
+        }
+    })
 }
 
-/**
- * 点击父级编号input框时
- */
-MenuInfoDlg.onClickDept = function (e, treeId, treeNode) {
-    $("#pcodeName").attr("value", MenuInfoDlg.ztreeInstance.getSelectedVal());
-    $("#pcode").attr("value", treeNode.id);
+
+var setting = {
+    view: {
+        selectedMulti: false //是否允许多选
+    },
+    data: {
+        simpleData: {
+            enable: true
+        }
+    },
+    callback:{
+        onClick: onClick
+    }
 };
 
+$().ready(function() {
+    var divTree = $("#treeDiv");
+    $("#partInput").click(function() {
+        // var x = $(this).offset().left;
+        // var y = $(this).offset().top;
+        // divTree.css({
+        //     left : x + "px",
+        //     top : y + "px"
+        // });
+        divTree.slideDown("slow");// 滑动方式显示元素
+    });
 
-/**
- * 显示父级菜单选择的树
- */
-MenuInfoDlg.showMenuSelectTree = function () {
-    Feng.showInputTree("pcodeName", "pcodeTreeDiv", 15, 34);
-};
+    divTree.hover(function() {
+
+    }, function() {
+        divTree.slideUp("slow");// 滑动方式隐藏元素
+    });
+    GetTree();
+});
+
+function GetTree() {
+    $.ajax({
+        type : "POST",
+        dataType : "json",
+        url : "/sys/menu/tree",
+        async : false,
+        success : function(data) {
+            if(data.status == 10000){
+                zTree = $.fn.zTree.init($("#parent"), setting, data.data);
+                //展开所有节点
+                zTree.expandAll(zTree);
+            }
+        },
+        error : function(error) {
+            layer.msg('系统错误！', {
+                icon : 2,
+                time : 1500
+            })
+        }
+    });
+}
+
+function onClick(e, treeId, treeNode) {
+    var zTree = $.fn.zTree.getZTreeObj("parent"),
+        nodes = zTree.getSelectedNodes(),
+        v = "";
+    nodes.sort(function compare(a,b){return a.id-b.id;});
+    for (var i=0, l=nodes.length; i<l; i++) {
+        v += nodes[i].name + ",";
+    }
+    if (v.length > 0 ) v = v.substring(0, v.length-1);
+    var cityObj = $("#partInput");
+    cityObj.attr("value", v);
+}
 
 $(function () {
-    Feng.initValidator("menuInfoForm", MenuInfoDlg.validateFields);
 
-    var ztree = new $ZTree("pcodeTree", "/menu/selectMenuTreeList");
-    ztree.bindOnClick(MenuInfoDlg.onClickDept);
-    ztree.init();
-    MenuInfoDlg.ztreeInstance = ztree;
-
-    //初始化是否是菜单
-    if($("#ismenuValue").val() == undefined){
-        $("#ismenu").val(0);
-    }else{
-        $("#ismenu").val($("#ismenuValue").val());
-    }
 });

@@ -3,7 +3,6 @@ package com.lab.manage.controller;
 import com.lab.manage.domain.Response;
 import com.lab.manage.domain.SysUser;
 import com.lab.manage.form.SysUserForm;
-import com.lab.manage.service.IndexService;
 import com.lab.manage.service.SysUserService;
 import com.lab.manage.shiro.ShiroUtils;
 import com.lab.manage.util.CreateImageCode;
@@ -47,7 +46,9 @@ public class LoginController extends AbstractController{
     }
 
     @RequestMapping("/index")
-    public String index(){
+    public String index(Model model){
+        SysUser userEntity = ShiroUtils.getUserEntity();
+        model.addAttribute("userName","管理员");
         return "index.html";
     }
 
@@ -152,6 +153,12 @@ public class LoginController extends AbstractController{
         response.setHeader("Cache-Control", "no-cache");
         response.setDateHeader("Expires", 0);
         vCode.write(response.getOutputStream());
+    }
+
+    @RequestMapping("/logout")
+    public String logout(){
+        ShiroUtils.logout();
+        return "redirect:/login";
     }
 
     @RequestMapping("/errorpage")

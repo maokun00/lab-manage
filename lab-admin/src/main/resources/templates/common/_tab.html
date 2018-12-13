@@ -15,7 +15,7 @@
                     <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                         <span class="clear">
                        <span class="block m-t-xs"><strong class="font-bold">欢迎登录</strong></span>
-                        <span class="text-muted text-xs block">管理员<b class="caret"></b></span>
+                        <span class="text-muted text-xs block">${userName}<b class="caret"></b></span>
                         </span>
                     </a>
                     <ul class="dropdown-menu m-t-xs">
@@ -31,22 +31,6 @@
             </li>
             
             <li>
-                <a class="J_menuItem" href="${ctxPath}/upload/list" name="tabMenuItem">
-                    <i class="fa s-skin-3"></i>
-                    <span class="nav-label">上传推荐图片</span>
-                </a>
-                <a href="#">
-                    <i class="fa s-skin-3"></i>
-                    <span class="nav-label">图片管理</span>
-                    <span class="fa arrow"></span>
-                </a>
-                <ul class="nav nav-second-level">
-                    <li>
-                        <a class="J_menuItem" href="${ctxPath}/pictureAuditing/list" name="tabMenuItem">图片审核</a>
-                        <a class="J_menuItem" href="${ctxPath}/pictureCount/list" name="tabMenuItem">图片统计</a>
-                    </li>
-                </ul>
-
                 <a href="#">
                     <i class="fa s-skin-3"></i>
                     <span class="nav-label">系统管理</span>
@@ -54,10 +38,13 @@
                 </a>
                 <ul class="nav nav-second-level">
                     <li>
-                        <a class="J_menuItem" href="${ctxPath}/user/list" name="tabMenuItem">管理员列表</a>
-                        <a class="J_menuItem" href="${ctxPath}/member/list" name="tabMenuItem">用户管理</a>
-                        <a class="J_menuItem" href="${ctxPath}/memberCount/list" name="tabMenuItem">用户统计</a>
-                        <a class="J_menuItem" href="${ctxPath}/userActivityCount/list" name="tabMenuItem">用户活跃度统计</a>
+                        <a class="J_menuItem" href="${ctxPath}/user/list" name="tabMenuItem">公司管理</a>
+                        <a class="J_menuItem" href="${ctxPath}/user/list" name="tabMenuItem">部门管理</a>
+                        <a class="J_menuItem" href="${ctxPath}/user/list" name="tabMenuItem">小组管理</a>
+                        <a class="J_menuItem" href="${ctxPath}/user/list" name="tabMenuItem">用户管理</a>
+                        <a class="J_menuItem" href="${ctxPath}/user/list" name="tabMenuItem">角色管理</a>
+                        <a class="J_menuItem" href="${ctxPath}/sys/menu" name="tabMenuItem">菜单管理</a>
+                        <a class="J_menuItem" href="${ctxPath}/memberCount/list" name="tabMenuItem">日志统计</a>
                     </li>
                     <!--<li>-->
                         <!--<a href="#">123asd <span class="fa arrow"></span></a>-->

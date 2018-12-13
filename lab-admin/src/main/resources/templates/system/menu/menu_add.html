@@ -2,35 +2,46 @@
 <div class="ibox float-e-margins">
 	<div class="ibox-content">
 		<div class="form-horizontal" id="menuInfoForm">
-		
+
 			<input type="hidden" id="id" value="">
 
-			<div class="row">
-				<div class="col-sm-6 b-r">
-					<#input id="name" name="名称" underline="true" />
-					<#input id="code" name="菜单编号" underline="true" />
-					<#input id="pcodeName" name="父级编号" underline="true"
-							hidden="pcode" readonly="readonly"
-							clickFun="MenuInfoDlg.showMenuSelectTree(); return false;"
-							style="background-color: #ffffff !important;"
-							selectFlag="true" selectId="pcodeTreeDiv" selectTreeId="pcodeTree" selectStyle="width:244px !important;"/>
-					<#select id="ismenu" name="是否是菜单">
-						<option value="1">是</option>
-						<option value="0">不是</option>
-					</#select>
-				</div>
-				<div class="col-sm-6">
-					<#input id="url" name="请求地址" underline="true" />
-					<#input id="num" name="排序" underline="true" />
-					<#input id="icon" name="图标" underline="false" />
+			<div class="modal-body">
+				<div class="row">
+					<div class="form-group">
+						<label for="menuName" class="control-label">菜单名称:</label>
+						<input type="text" class="form-control" id="menuName">
+					</div>
+					<div class="form-group">
+						<label for="perms" class="control-label">授权:</label>
+						<input type="text" class="form-control" id="perms">
+					</div>
+					<div class="form-group">
+						<label for="url" class="control-label">URL:</label>
+						<input type="text" class="form-control" id="url">
+					</div>
+					<div class="form-group">
+						<label for="partInput" class="control-label">父菜单:</label>
+						<input class="form-control" id="partInput" readonly/>
+						<div id="treeDiv" style="position: absolute; display: none; width: 190px; height: 300px; z-index: 9999; background-color: #F7F7F7; overflow: auto">>
+							<ul id="parent" class="ztree"></ul>
+						</div>
+					</div>
+					<div class="form-group col-sm-6">
+						<label for="ismenu" class="control-label">是否是菜单:</label>
+						<select class="form-control" id="ismenu">
+							<option value="1">是</option>
+							<option value="2">不是</option>
+						</select>
+					</div>
+					<div class="form-group col-sm-6">
+						<label for="orderNum" class="control-label">排序:</label>
+						<input type="text" class="form-control" id="orderNum">
+					</div>
+
 				</div>
 			</div>
-
-			<div class="row btn-group-m-t">
-				<div class="col-sm-10">
-					<#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="MenuInfoDlg.addSubmit()"/>
-					<#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="MenuInfoDlg.close()"/>
-				</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary"  onclick="MenuInfoDlg.addSubmit()">Save changes</button>
 			</div>
 		</div>
 

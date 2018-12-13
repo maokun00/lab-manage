@@ -36,14 +36,6 @@ public class ShiroUtils {
         return getUserEntity().getId();
     }
 
-    public static void setSessionAttribute(Object key, Object value) {
-        getSession().setAttribute(key, value);
-    }
-
-    public static Object getSessionAttribute(Object key) {
-        return getSession().getAttribute(key);
-    }
-
     public static boolean isLogin() {
         return SecurityUtils.getSubject().getPrincipal() != null;
     }

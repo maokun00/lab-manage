@@ -20,7 +20,7 @@ public class BaseForm {
     }
 
     public Integer getLimit() {
-        return limit;
+        return this.limit;
     }
 
     public void setLimit(Integer limit) {
