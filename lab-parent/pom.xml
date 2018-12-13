@@ -11,6 +11,12 @@
 
     <modules>
         <module>../lab-spring-admin</module>
+        <module>../lab-admin</module>
+        <module>../lab-core</module>
+        <module>../lab-service</module>
+        <module>../lab-service-sso</module>
+        <module>../lab-repository</module>
+        <module>../lab-spring-eureka</module>
     </modules>
 
     <parent>

@@ -8,9 +8,11 @@
         <version>1.0-SNAPSHOT</version>
         <relativePath>../lab-parent/pom.xml</relativePath>
     </parent>
-    <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>lab-eureka</artifactId>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>lab-manage</groupId>
+    <artifactId>lab-spring-eureka</artifactId>
+    <version>1.0-SNAPSHOT</version>
 
     <dependencies>
         <dependency>
@@ -32,6 +34,13 @@
                 <configuration>
                     <executable>true</executable>
                 </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>build-info</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
