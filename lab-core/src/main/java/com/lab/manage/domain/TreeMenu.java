@@ -13,6 +13,8 @@ public class TreeMenu {
 
     private boolean open;
 
+    private boolean checked;
+
     public Integer getId() {
         return id;
     }
@@ -43,5 +45,13 @@ public class TreeMenu {
 
     public void setOpen(boolean open) {
         this.open = open;
+    }
+
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
     }
 }

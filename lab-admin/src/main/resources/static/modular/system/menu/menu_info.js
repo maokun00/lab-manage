@@ -85,6 +85,7 @@ MenuInfoDlg.editSubmit = function () {
     }else {
         parentId = nodes[0].id;
     }
+    var id = $("#id").val();
     var name = $("#menuName").val();
     var type = $("#ismenu").val();
     var perms = $("#perms").val();
@@ -93,6 +94,7 @@ MenuInfoDlg.editSubmit = function () {
     var parent = $("#parentId").val();
 
     var form = {
+        id : id,
         parentId : parentId,
         name : name,
         type : type,
@@ -115,6 +117,8 @@ MenuInfoDlg.editSubmit = function () {
                     window.parent.Menu.table.refresh();
                     MenuInfoDlg.close();
                 });
+            }else{
+                layer.alert(data.message)
             }
         },
         error : function(error) {

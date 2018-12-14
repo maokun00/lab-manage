@@ -19,6 +19,8 @@ public class SysUser extends BaseDomain {
 
     private Integer status;
 
+    private Integer companyId;
+
     public String getUsername() {
         return username;
     }
@@ -73,5 +75,13 @@ public class SysUser extends BaseDomain {
 
     public void setMobile(String mobile) {
         this.mobile = mobile;
+    }
+
+    public Integer getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Integer companyId) {
+        this.companyId = companyId;
     }
 }

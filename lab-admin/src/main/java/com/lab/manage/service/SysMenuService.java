@@ -1,5 +1,6 @@
 package com.lab.manage.service;
 
+import com.lab.manage.domain.Response;
 import com.lab.manage.domain.SysMenu;
 import com.lab.manage.domain.TreeMenu;
 import com.lab.manage.form.SysMenuForm;
@@ -34,4 +35,10 @@ public interface SysMenuService {
 
     @RequestMapping("/service/sys/menu/findById")
     SysMenuResult findById(@RequestParam("memuId") Integer memuId);
+
+    @RequestMapping("/service/sys/menu/editMenu")
+    Object editMenu(SysMenu sysMenu);
+
+    @RequestMapping("/service/sys/menu/remove")
+    Object remove(@RequestParam("memuId") Integer menuId);
 }

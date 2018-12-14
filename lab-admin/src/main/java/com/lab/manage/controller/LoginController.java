@@ -48,7 +48,7 @@ public class LoginController extends AbstractController{
     @RequestMapping("/index")
     public String index(Model model){
         SysUser userEntity = ShiroUtils.getUserEntity();
-        model.addAttribute("userName","管理员");
+        model.addAttribute("userName",userEntity.getNickname());
         return "index.html";
     }
 

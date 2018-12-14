@@ -2,6 +2,7 @@ package com.lab.manage.service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.lab.manage.domain.Response;
 import com.lab.manage.domain.SysMenu;
 import com.lab.manage.domain.TreeMenu;
 import com.lab.manage.form.SysMenuForm;
@@ -85,4 +86,20 @@ public class SysMenuService {
         return sysMenuResult;
     }
 
+    @RequestMapping("/editMenu")
+    public Response editMenu(@RequestBody SysMenu sysMenu){
+        if(sysMenu.getId() == null) return new Response.Builder(Response.ResponseCode.FAILURE.getNumber()).msg("缺少参数，请重新操作").build();
+        sysMenuMapper.updateById(new SysMenuPojo(sysMenu));
+        return new Response.Builder(Response.ResponseCode.SUCCESS.getNumber()).build();
+    }
+
+    @RequestMapping("/remove")
+    public Response remove(@RequestParam("memuId") Integer menuId){
+        List<SysMenuResult> results = sysMenuMapper.findByParentId(menuId);
+        if(results.isEmpty()){
+            sysMenuMapper.deleteById(menuId);
+            return new Response.Builder(Response.ResponseCode.SUCCESS.getNumber()).build();
+        }
+        return new Response.Builder(Response.ResponseCode.FAILURE.getNumber()).msg("请先删除子菜单").build();
+    }
 }

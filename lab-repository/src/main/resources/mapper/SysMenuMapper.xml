@@ -34,6 +34,16 @@
       FROM sys_menu
     </select>
 
+    <select id="findTreeByCompanyId" resultType="com.lab.manage.domain.TreeMenu">
+      SELECT id,parent_id AS 'pId',`name`
+      FROM sys_menu
+      WHERE id IN (
+          SELECT menu_id
+          FROM sys_menu_company
+          WHERE company_id = #{id}
+      )
+    </select>
+
     <select id="findList" resultMap="BaseResultMapResult">
       SELECT <include refid="Base_Column_List"/>
       FROM sys_menu
@@ -51,6 +61,12 @@
             #{item}
           </foreach>
         )
+    </select>
+
+    <select id="findByParentId" resultMap="BaseResultMapResult">
+        SELECT <include refid="Base_Column_List"/>
+        FROM sys_menu
+        WHERE parent_id = #{id}
     </select>
 
 </mapper>

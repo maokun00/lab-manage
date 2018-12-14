@@ -2,10 +2,12 @@ package com.lab.manage.domain;
 
 import com.alibaba.fastjson.JSON;
 
+import java.io.Serializable;
+
 /**
  * Created by Chengcheng on 2018/12/12.
  */
-public class Response {
+public class Response implements Serializable{
 
     private String message;
 

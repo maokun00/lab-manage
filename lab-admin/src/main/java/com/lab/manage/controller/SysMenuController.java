@@ -8,6 +8,7 @@ import com.lab.manage.form.SysMenuForm;
 import com.lab.manage.result.SysMenuResult;
 import com.lab.manage.service.SysMenuService;
 import com.lab.manage.shiro.ShiroUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -63,6 +64,7 @@ public class SysMenuController extends AbstractController{
     @RequestMapping("/add")
     @ResponseBody
     public Response addMenu(SysMenu sysMenu){
+        if(checkParam(sysMenu) != null) return checkParam(sysMenu);
         sysMenu.setCreateBy(ShiroUtils.getUserEntity().getNickname());
         sysMenu.setCreateTime(new Date());
         boolean b = sysMenuService.addMenu(sysMenu);
@@ -72,11 +74,23 @@ public class SysMenuController extends AbstractController{
     @MyLog(requestUrl = "修改菜单")
     @RequestMapping("/edit")
     @ResponseBody
-    public Response editMenu(SysMenu sysMenu){
+    public Object editMenu(SysMenu sysMenu){
+        if(checkParam(sysMenu) != null) return checkParam(sysMenu);
         sysMenu.setUpdateBy(ShiroUtils.getUserEntity().getNickname());
         sysMenu.setUpdateTime(new Date());
-        boolean b = sysMenuService.addMenu(sysMenu);
-        return this.response(Response.ResponseCode.SUCCESS);
+        return sysMenuService.editMenu(sysMenu);
     }
 
+    @MyLog(requestUrl = "删除菜单")
+    @RequestMapping("/remove/{menuId}")
+    @ResponseBody
+    public Object removeMenu(@PathVariable("menuId") Integer menuId){
+        return sysMenuService.remove(menuId);
+    }
+
+    private Response checkParam(SysMenu sysMenu){
+        if(StringUtils.isBlank(sysMenu.getName())) return this.response(Response.ResponseCode.FAILURE).message("缺少菜单名称");
+        if(sysMenu.getParentId() == null) return this.response(Response.ResponseCode.FAILURE).message("请选择父级菜单");
+        return null;
+    }
 }

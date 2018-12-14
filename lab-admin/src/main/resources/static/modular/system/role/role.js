@@ -2,11 +2,12 @@
  * 角色管理的单例
  */
 var Role = {
-    id: "roleTable",	//表格id
+    id: "RoleTable",	//表格id
     seItem: null,		//选中的条目
     table: null,
     layerIndex: -1
 };
+
 
 /**
  * 初始化表格的列
@@ -15,10 +16,10 @@ Role.initColumn = function () {
     var columns = [
         {field: 'selectItem', radio: true},
         {title: 'id', field: 'id', visible: false, align: 'center', valign: 'middle'},
-        {title: '名称', field: 'name', align: 'center', valign: 'middle', sortable: true},
-        {title: '上级角色', field: 'pName', align: 'center', valign: 'middle', sortable: true},
-        {title: '所在部门', field: 'deptName', align: 'center', valign: 'middle', sortable: true},
-        {title: '别名', field: 'tips', align: 'center', valign: 'middle', sortable: true}]
+        {title: '菜单名称', field: 'name', align: 'center', valign: 'middle', sortable: true},
+        {title: '授权', field: 'perms', align: 'center', valign: 'middle', sortable: true},
+        {title: '请求地址', field: 'url', align: 'center', valign: 'middle', sortable: true},
+        {title: '排序', field: 'orderNum', align: 'center', valign: 'middle', sortable: true}]
     return columns;
 };
 
@@ -38,88 +39,88 @@ Role.check = function () {
 };
 
 /**
- * 点击添加管理员
+ * 点击添加菜单
  */
 Role.openAddRole = function () {
+
     var index = layer.open({
         type: 2,
-        title: '添加角色',
+        title: '添加菜单',
         area: ['800px', '450px'], //宽高
         fix: false, //不固定
         maxmin: true,
-        content: Feng.ctxPath + '/role/role_add'
+        content: Feng.ctxPath + '/sys/Role/Role_add'
     });
     this.layerIndex = index;
 };
 
 /**
- * 点击修改按钮时
+ * 点击修改
  */
 Role.openChangeRole = function () {
     if (this.check()) {
         var index = layer.open({
             type: 2,
-            title: '修改角色',
+            title: '修改菜单',
             area: ['800px', '450px'], //宽高
             fix: false, //不固定
             maxmin: true,
-            content: Feng.ctxPath + '/role/role_edit/' + this.seItem.id
+            content: Feng.ctxPath + '/sys/Role/Role_edit/' + this.seItem.id
         });
         this.layerIndex = index;
     }
 };
 
 /**
- * 删除角色
+ * 删除
  */
 Role.delRole = function () {
     if (this.check()) {
-
-        var operation = function(){
-            var ajax = new $ax(Feng.ctxPath + "/role/remove", function () {
-                Feng.success("删除成功!");
-                Role.table.refresh();
-            }, function (data) {
-                Feng.error("删除失败!" + data.responseJSON.message + "!");
-            });
-            ajax.set("roleId", Role.seItem.id);
-            ajax.start();
-        };
-
-        Feng.confirm("是否删除角色 " + Role.seItem.name + "?",operation);
+        var id = Role.seItem.id;
+        layer.confirm('确定要删除该菜单？', {
+            btn: ['确定','取消'] //按钮
+        }, function(){
+            $.ajax({
+                type : "POST",
+                url : "/sys/Role/remove/" + id,
+                async : false,
+                success : function(data) {
+                    if(data.status == 10000){
+                        layer.msg('操作成功');
+                        Role.table.refresh();
+                    }else{
+                        layer.alert(data.message);
+                    }
+                },
+                error : function(error) {
+                    layer.msg('系统错误！', {
+                        icon : 2,
+                        time : 1500
+                    })
+                }
+            })
+        }, function(){});
     }
 };
 
 /**
- * 权限配置
- */
-Role.assign = function () {
-    if (this.check()) {
-        var index = layer.open({
-            type: 2,
-            title: '权限配置',
-            area: ['300px', '450px'], //宽高
-            fix: false, //不固定
-            maxmin: true,
-            content: Feng.ctxPath + '/role/role_assign/' + this.seItem.id
-        });
-        this.layerIndex = index;
-    }
-};
-
-/**
- * 搜索角色
+ * 搜索
  */
 Role.search = function () {
     var queryData = {};
-    queryData['roleName'] = $("#roleName").val();
+
+    queryData['RoleName'] = $("#RoleName").val();
+    queryData['level'] = $("#level").val();
+
     Role.table.refresh({query: queryData});
 }
 
+
+
 $(function () {
     var defaultColunms = Role.initColumn();
-    var table = new BSTable(Role.id, "/role/list", defaultColunms);
-    table.setPaginationType("client");
+    var table = new BSTable("RoleTable", "/sys/role/list", defaultColunms);
+    table.setPaginationType("server");
     table.init();
     Role.table = table;
 });

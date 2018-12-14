@@ -1,5 +1,9 @@
 package com.lab.manage.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
 /**
@@ -15,7 +19,13 @@ public class Company extends BaseDomain {
 
     private String privateKey;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date endTime;
+
+    private String person;
+
+    private String personMobile;
 
     public Integer getId() {
         return id;
@@ -55,5 +65,21 @@ public class Company extends BaseDomain {
 
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
+    }
+
+    public String getPerson() {
+        return person;
+    }
+
+    public void setPerson(String person) {
+        this.person = person;
+    }
+
+    public String getPersonMobile() {
+        return personMobile;
+    }
+
+    public void setPersonMobile(String personMobile) {
+        this.personMobile = personMobile;
     }
 }

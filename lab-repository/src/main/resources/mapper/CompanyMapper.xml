@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lab.manage.mapper.CompanyMapper">
+
+    <resultMap id="BaseResultMap" type="com.lab.manage.domain.Company">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="person" property="person"/>
+        <result column="person_mobile" property="personMobile"/>
+        <result column="public_key" property="publicKey"/>
+        <result column="private_key" property="privateKey"/>
+        <result column="end_time" property="endTime"/>
+        <result column="create_time" property="createTime"/>
+        <result column="create_by" property="createBy"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="update_by" property="updateBy"/>
+    </resultMap>
+    
+    <resultMap id="BaseResultMapResult" type="com.lab.manage.result.CompanyResult" extends="BaseResultMap"/>
+
+    <select id="findList" resultMap="BaseResultMapResult">
+      SELECT id,name,person,person_mobile,end_time
+      FROM company
+      ORDER BY create_time DESC
+    </select>
+
+    <select id="findById" resultMap="BaseResultMapResult">
+      SELECT id,name,person,person_mobile,end_time
+      FROM company
+      WHERE id = #{id}
+    </select>
+    
+    <delete id="removeMenuByCompanyId">
+      DELETE FROM sys_menu_company WHERE company_id = #{id}
+    </delete>
+    
+    <insert id="pushMenu">
+        INSERT INTO sys_menu_company(company_id,menu_id)
+        VALUES 
+        <foreach collection="treeIds" separator="," item="item">
+            (#{companyId},#{item})
+        </foreach>
+    </insert>
+    
+</mapper>

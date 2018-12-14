@@ -1,194 +1,128 @@
 /**
- * 角色详情对话框（可用于添加和修改对话框）
+ * 菜单详情对话框
  */
-var RolInfoDlg = {
-    roleInfoData: {},
-    deptZtree: null,
-    pNameZtree: null,
-    validateFields: {
-        name: {
-            validators: {
-                notEmpty: {
-                    message: '用户名不能为空'
-                }
-            }
-        },
-        tips: {
-            validators: {
-                notEmpty: {
-                    message: '别名不能为空'
-                }
-            }
-        },
-        pName: {
-            validators: {
-                notEmpty: {
-                    message: '父级名称不能为空'
-                }
-            }
-        }
-    }
+var RoleInfoDlg = {
+    menuInfoData: {},
 };
 
 /**
  * 清除数据
  */
-RolInfoDlg.clearData = function () {
-    this.roleInfoData = {};
-};
+RoleInfoDlg.clearData = function () {
+    this.menuInfoData = {};
+}
 
-/**
- * 设置对话框中的数据
- *
- * @param key 数据的名称
- * @param val 数据的具体值
- */
-RolInfoDlg.set = function (key, value) {
-    this.roleInfoData[key] = (typeof value == "undefined") ? $("#" + key).val() : value;
-    return this;
-};
-
-/**
- * 设置对话框中的数据
- *
- * @param key 数据的名称
- * @param val 数据的具体值
- */
-RolInfoDlg.get = function (key) {
-    return $("#" + key).val();
-};
 
 /**
  * 关闭此对话框
  */
-RolInfoDlg.close = function () {
+RoleInfoDlg.close = function () {
     parent.layer.close(window.parent.Role.layerIndex);
-};
+}
 
-/**
- * 点击部门input框时
- *
- * @param e
- * @param treeId
- * @param treeNode
- * @returns
- */
-RolInfoDlg.onClickDept = function (e, treeId, treeNode) {
-    $("#deptName").attr("value", RolInfoDlg.deptZtree.getSelectedVal());
-    $("#deptid").attr("value", treeNode.id);
-};
-RolInfoDlg.onDblClickDept = function (e, treeId, treeNode) {
-    $("#deptName").attr("value", RolInfoDlg.deptZtree.getSelectedVal());
-    $("#deptid").attr("value", treeNode.id);
-    $("#deptContent").fadeOut("fast");
-};
-
-/**
- * 点击父级菜单input框时
- *
- * @param e
- * @param treeId
- * @param treeNode
- * @returns
- */
-RolInfoDlg.onClickPName = function (e, treeId, treeNode) {
-    $("#pName").attr("value", RolInfoDlg.pNameZtree.getSelectedVal());
-    $("#pid").attr("value", treeNode.id);
-};
-
-/**
- * 显示部门选择的树
- *
- * @returns
- */
-RolInfoDlg.showDeptSelectTree = function () {
-    Feng.showInputTree("deptName", "deptContent");
-};
-
-/**
- * 显示父级菜单的树
- *
- * @returns
- */
-RolInfoDlg.showPNameSelectTree = function () {
-    Feng.showInputTree("pName", "pNameContent");
-};
-
-/**
- * 收集数据
- */
-RolInfoDlg.collectData = function () {
-    this.set('id').set('name').set('pid').set('deptid').set('tips').set('num');
-};
-
-/**
- * 验证数据是否为空
- */
-RolInfoDlg.validate = function () {
-    $('#roleInfoForm').data("bootstrapValidator").resetForm();
-    $('#roleInfoForm').bootstrapValidator('validate');
-    return $("#roleInfoForm").data('bootstrapValidator').isValid();
-};
 
 /**
  * 提交添加用户
  */
-RolInfoDlg.addSubmit = function () {
-
-    this.clearData();
-    this.collectData();
-
-    if (!this.validate()) {
-        return;
-    }
-
-    //提交信息
-    var ajax = new $ax(Feng.ctxPath + "/role/add", function (data) {
-        Feng.success("添加成功!");
-        window.parent.Role.table.refresh();
-        RolInfoDlg.close();
-    }, function (data) {
-        Feng.error("添加失败!" + data.responseJSON.message + "!");
-    });
-    ajax.set(this.roleInfoData);
-    ajax.start();
-};
+RoleInfoDlg.addSubmit = function () {
+    var form = $("#roleForm");
+    $.ajax({
+        type : "POST",
+        data : form.serialize(),
+        url : "/sys/role/add",
+        async : false,
+        success : function(data) {
+            if(data.status == 10000){
+                layer.alert('操作成功', {
+                    skin: 'layui-layer-molv' //样式类名
+                    ,closeBtn: 0
+                }, function(){
+                    window.parent.Menu.table.refresh();
+                    RoleInfoDlg.close();
+                });
+            }
+        },
+        error : function(error) {
+            layer.msg('系统错误！', {
+                icon : 2,
+                time : 1500
+            })
+        }
+    })
+}
 
 /**
  * 提交修改
  */
-RolInfoDlg.editSubmit = function () {
+RoleInfoDlg.editSubmit = function () {
+    var parentId;
+    var zTree = $.fn.zTree.getZTreeObj("parent");
+    var nodes = zTree.getSelectedNodes();
+    if(nodes.length == 0){
+        parentId = $("#parentId").val();
+    }else {
+        parentId = nodes[0].id;
+    }
+    var id = $("#id").val();
+    var name = $("#menuName").val();
+    var type = $("#ismenu").val();
+    var perms = $("#perms").val();
+    var url = $("#url").val();
+    var orderNum = $("#orderNum").val();
+    var parent = $("#parentId").val();
 
-    this.clearData();
-    this.collectData();
-
-    if (!this.validate()) {
-        return;
+    var form = {
+        id : id,
+        parentId : parentId,
+        name : name,
+        type : type,
+        orderNum : orderNum,
+        perms :perms,
+        url : url
     }
 
-    //提交信息
-    var ajax = new $ax(Feng.ctxPath + "/role/edit", function (data) {
-        Feng.success("修改成功!");
-        window.parent.Role.table.refresh();
-        RolInfoDlg.close();
-    }, function (data) {
-        Feng.error("修改失败!" + data.responseJSON.message + "!");
-    });
-    ajax.set(this.roleInfoData);
-    ajax.start();
+    $.ajax({
+        type : "POST",
+        data : form,
+        url : "/sys/menu/edit",
+        async : false,
+        success : function(data) {
+            if(data.status == 10000){
+                layer.alert('操作成功', {
+                    skin: 'layui-layer-molv' //样式类名
+                    ,closeBtn: 0
+                }, function(){
+                    window.parent.Menu.table.refresh();
+                    RoleInfoDlg.close();
+                });
+            }else{
+                layer.alert(data.message)
+            }
+        },
+        error : function(error) {
+            layer.msg('系统错误！', {
+                icon : 2,
+                time : 1500
+            })
+        }
+    })
+}
+
+
+var setting = {
+    view: {
+        selectedMulti: false //是否允许多选
+    },
+    data: {
+        simpleData: {
+            enable: true
+        }
+    },
+    callback:{
+        onClick: onClick
+    }
 };
 
 $(function () {
-    Feng.initValidator("roleInfoForm", RolInfoDlg.validateFields);
 
-    var deptTree = new $ZTree("deptTree", "/dept/tree");
-    deptTree.bindOnClick(RolInfoDlg.onClickDept);
-    deptTree.bindOnDblClick(RolInfoDlg.onDblClickDept)
-    deptTree.init();
-    RolInfoDlg.deptZtree = deptTree;
-
-    var pNameTree = new $ZTree("pNameTree", "/role/roleTreeList");
-    pNameTree.bindOnClick(RolInfoDlg.onClickPName);
-    pNameTree.init();
-    RolInfoDlg.pNameZtree = pNameTree;
 });

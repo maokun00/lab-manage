@@ -1,0 +1,105 @@
+@layout("/common/_container.html"){
+<div class="row">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>角色管理</h5>
+            </div>
+            <div class="ibox-content">
+                <div class="row row-lg">
+                    <div class="col-sm-3">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search for...">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" clickFun="Role.search()" type="button">搜索</button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="hidden-xs col-sm-3" id="menuTableToolbar">
+                            <button type="button" class="btn btn-primary" onclick="Role.openAddMenu()">添  加</button>
+                            <button type="button" class="btn btn-primary" onclick="Role.openChangeMenu()">修改</button>
+                            <button type="button" class="btn btn-info" data-toggle="modal" onclick="GetTree()">权限</button>
+                            <button type="button" class="btn btn-danger" onclick="Role.delMenu()">删  除</button>
+                        </div>
+                        <table id="RoleTable"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+            </div>
+            <div class="modal-body">
+                <ul id="parent" class="ztree"></ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var setting = {
+        check: {
+            enable: true
+        },
+        view: {
+            selectedMulti: true //是否允许多选
+        },
+        data: {
+            simpleData: {
+                enable: true
+            }
+        }
+    };
+
+    function GetTree() {
+        var id;
+        var selected = $("#RoleTable").bootstrapTable('getSelections');
+        if(selected.length == 0){
+            Feng.info("请选择一条记录！")
+            return false;
+        }
+        id = selected[0].id;
+
+        $.ajax({
+            type : "POST",
+            dataType : "json",
+            url : "/sys/role/tree/" + id,
+            async : false,
+            success : function(data) {
+                if(data.status == 10000){
+                    zTree = $.fn.zTree.init($("#parent"), setting, data.data);
+                    //展开所有节点
+                    zTree.expandAll(zTree);
+                    $("#myModal").modal('show')
+                }
+            },
+            error : function(error) {
+                layer.msg('系统错误！', {
+                    icon : 2,
+                    time : 1500
+                })
+            }
+        });
+
+    }
+
+
+</script>
+<script src="${ctxPath}/static/modular/system/role/role.js"></script>
+<script src="${ctxPath}/static/js/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script src="${ctxPath}/static/js/common/ztree-object.js"></script>
+<link href="${ctxPath}/static/css/plugins/ztree/zTreeStyle.css" rel="stylesheet">
+@}

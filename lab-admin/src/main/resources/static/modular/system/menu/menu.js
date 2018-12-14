@@ -76,19 +76,30 @@ Menu.openChangeMenu = function () {
  */
 Menu.delMenu = function () {
     if (this.check()) {
-
-        var operation = function () {
-            var ajax = new $ax(Feng.ctxPath + "/menu/remove", function (data) {
-                Feng.success("删除成功!");
-                Menu.table.refresh();
-            }, function (data) {
-                Feng.error("删除失败!" + data.responseJSON.message + "!");
-            });
-            ajax.set("menuId", Menu.seItem.id);
-            ajax.start();
-        };
-
-        Feng.confirm("是否刪除该菜单?", operation);
+        var id = Menu.seItem.id;
+        layer.confirm('确定要删除该菜单？', {
+            btn: ['确定','取消'] //按钮
+        }, function(){
+            $.ajax({
+                type : "POST",
+                url : "/sys/menu/remove/" + id,
+                async : false,
+                success : function(data) {
+                    if(data.status == 10000){
+                        layer.msg('操作成功');
+                        Menu.table.refresh();
+                    }else{
+                        layer.alert(data.message);
+                    }
+                },
+                error : function(error) {
+                    layer.msg('系统错误！', {
+                        icon : 2,
+                        time : 1500
+                    })
+                }
+            })
+        }, function(){});
     }
 };
 

@@ -1,0 +1,138 @@
+@layout("/common/_container.html"){
+<div class="row">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>公司管理</h5>
+            </div>
+            <div class="ibox-content">
+                <div class="row row-lg">
+                    <div class="col-sm-3">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search for...">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" clickFun="Company.search()" type="button">搜索</button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="hidden-xs col-sm-3" id="menuTableToolbar">
+                            <button type="button" class="btn btn-primary" onclick="Company.openAddCompany()">添  加</button>
+                            <button type="button" class="btn btn-primary" onclick="Company.openChangeCompany()">修 改</button>
+                            <button type="button" class="btn btn-info" data-toggle="modal" onclick="GetTree()">菜 单</button>
+                        </div>
+                        <table id="companyTable"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+            </div>
+            <div class="modal-body">
+                <ul id="parent" class="ztree"></ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="treeSubmit()">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var setting = {
+        check: {
+            enable: true
+        },
+        view: {
+            selectedMulti: true //是否允许多选
+        },
+        data: {
+            simpleData: {
+                enable: true
+            }
+        }
+    };
+
+    function GetTree() {
+        var id;
+        var selected = $("#companyTable").bootstrapTable('getSelections');
+        if(selected.length == 0){
+            Feng.info("请选择一条记录！")
+            return false;
+        }
+        id = selected[0].id;
+
+        $.ajax({
+            type : "POST",
+            dataType : "json",
+            url : "/sys/company/tree/" + id,
+            async : false,
+            success : function(data) {
+                if(data.status == 10000){
+                    zTree = $.fn.zTree.init($("#parent"), setting, data.data);
+                    //展开所有节点
+                    zTree.expandAll(zTree);
+                    $("#myModal").modal('show')
+                }
+            },
+            error : function(error) {
+                layer.msg('系统错误！', {
+                    icon : 2,
+                    time : 1500
+                })
+            }
+        });
+
+    }
+
+    function treeSubmit() {
+        var selected = $("#companyTable").bootstrapTable('getSelections');
+        var id = selected[0].id;
+
+        var ids = new Array();
+        var zTree = $.fn.zTree.getZTreeObj("parent");
+        var nodes = zTree.getCheckedNodes(true);
+        for(var i = 0; i < nodes.length;i++){
+            ids.push(nodes[i].id)
+        }
+
+        $.ajax({
+            type : "POST",
+            data: JSON.stringify(ids),
+            contentType : "application/json",
+            url : "/sys/company/tree/submit/" + id,
+            async : false,
+            success : function(data) {
+                if(data.status == 10000){
+                    layer.msg("操作成功！");
+                    $("#myModal").modal('hide')
+                }else{
+                    layer.msg(data.message);
+                    $("#myModal").modal('hide')
+                }
+            },
+            error : function(error) {
+                layer.msg('系统错误！', {
+                    icon : 2,
+                    time : 1500
+                })
+            }
+        });
+    }
+
+</script>
+<script src="${ctxPath}/static/modular/system/company/company.js"></script>
+<script src="${ctxPath}/static/js/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script src="${ctxPath}/static/js/common/ztree-object.js"></script>
+<link href="${ctxPath}/static/css/plugins/ztree/zTreeStyle.css" rel="stylesheet">
+@}

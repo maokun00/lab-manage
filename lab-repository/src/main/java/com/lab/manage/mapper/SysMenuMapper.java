@@ -22,4 +22,8 @@ public interface SysMenuMapper extends BaseMapper<SysMenuPojo> {
     List<SysMenuResult> findList(SysMenuForm sysMenuForm);
 
     SysMenuResult findById(Integer memuId);
+
+    List<SysMenuResult> findByParentId(Integer menuId);
+
+    List<TreeMenu> findTreeByCompanyId(Integer companyId);
 }
