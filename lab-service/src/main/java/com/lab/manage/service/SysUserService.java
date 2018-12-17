@@ -27,7 +27,11 @@ public class SysUserService {
     @Autowired
     private SysUserMapper sysUserMapper;
 
-
+    /**
+     * @Author Chengcheng
+     * @Description : 根据用户名获取用户
+     * @Date 2018/12/17 上午9:39
+     */
     @RequestMapping("/findByUsername")
     public SysUser findByUsername(@RequestParam("username") String username){
         if(StringUtils.isBlank(username)) {
@@ -38,6 +42,11 @@ public class SysUserService {
         return sysUser;
     }
 
+    /**
+     * @Author Chengcheng
+     * @Description : 注册
+     * @Date 2018/12/17 上午9:39
+     */
     @RequestMapping("/register")
     public boolean register( @RequestParam("username") String username,
                              @RequestParam("password") String password,

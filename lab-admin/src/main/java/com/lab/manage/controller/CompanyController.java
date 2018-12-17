@@ -1,15 +1,13 @@
 package com.lab.manage.controller;
 
 import com.lab.manage.config.MyLog;
-import com.lab.manage.domain.Company;
-import com.lab.manage.domain.Response;
-import com.lab.manage.domain.SysUser;
-import com.lab.manage.domain.TreeMenu;
+import com.lab.manage.domain.*;
 import com.lab.manage.form.CompanyForm;
 import com.lab.manage.service.CompanyService;
 import com.lab.manage.service.SysRoleService;
 import com.lab.manage.shiro.ShiroUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,7 +30,9 @@ public class CompanyController extends AbstractController {
     private SysRoleService sysRoleService;
 
     @RequestMapping
-    public String index(){
+    public String index(Model model){
+        List<SysRole> roles = sysRoleService.findNoCompanyRoleList();
+        model.addAttribute("roles",roles);
         return "system/company/company.html";
     }
 
@@ -66,8 +66,9 @@ public class CompanyController extends AbstractController {
         return this.response(Response.ResponseCode.SUCCESS);
     }
 
-    @MyLog(requestUrl = "分配菜单")
+    @MyLog(requestUrl = "公司设置菜单")
     @RequestMapping("/tree/submit/{companyId}")
+    @RequiresPermissions("sys:company:menu")
     @ResponseBody
     public Response treeSubmit(@RequestBody String[] treeIds,@PathVariable("companyId") Integer companyId){
         Company company = companyService.findById(companyId);
@@ -75,7 +76,24 @@ public class CompanyController extends AbstractController {
         try{
             companyService.treeSubmit(companyId,treeIds);
         }catch (Exception e){
-            e.printStackTrace();
+            logger.error("服务异常 {}",e);
+            return this.response(Response.ResponseCode.FAILURE).message("服务异常");
+        }
+        return this.response(Response.ResponseCode.SUCCESS);
+    }
+
+    @MyLog(requestUrl = "公司设置角色")
+    @RequestMapping("/role/submit/{companyId}")
+    @RequiresPermissions("sys:company:role")
+    @ResponseBody
+    public Response roleSubmit(@RequestBody String[] roleIds,@PathVariable("companyId") Integer companyId){
+        Company company = companyService.findById(companyId);
+        if(company == null) return this.response(Response.ResponseCode.FAILURE).message("请重新选择公司！");
+        if(roleIds.length == 0) return this.response(Response.ResponseCode.SUCCESS);
+        try {
+            companyService.roleSubmit(companyId,roleIds);
+        }catch (Exception e){
+            logger.error("服务异常 {}",e);
             return this.response(Response.ResponseCode.FAILURE).message("服务异常");
         }
         return this.response(Response.ResponseCode.SUCCESS);
@@ -83,6 +101,7 @@ public class CompanyController extends AbstractController {
 
     @MyLog(requestUrl = "新增公司")
     @RequestMapping("/add")
+    @RequiresPermissions("sys:company:add")
     @ResponseBody
     public Response addCompany(Company company){
         if(StringUtils.isBlank(company.getName())) return this.response(Response.ResponseCode.FAILURE).message("请填写公司名称");
@@ -94,6 +113,7 @@ public class CompanyController extends AbstractController {
             company.setCreateTime(new Date());
             companyService.addCompany(company);
         }catch (Exception e){
+            logger.error("服务异常 {}",e);
             return this.response(Response.ResponseCode.FAILURE).message("服务异常");
         }
         return this.response(Response.ResponseCode.SUCCESS);
@@ -101,6 +121,7 @@ public class CompanyController extends AbstractController {
 
     @MyLog(requestUrl = "修改公司")
     @RequestMapping("/edit")
+    @RequiresPermissions("sys:company:edit")
     @ResponseBody
     public Response editCompany(Company company){
         if(StringUtils.isBlank(company.getName())) return this.response(Response.ResponseCode.FAILURE).message("请填写公司名称");
@@ -112,6 +133,7 @@ public class CompanyController extends AbstractController {
             company.setUpdateTime(new Date());
             companyService.editCompany(company);
         }catch (Exception e){
+            logger.error("服务异常 {}",e);
             return this.response(Response.ResponseCode.FAILURE).message("服务异常");
         }
         return this.response(Response.ResponseCode.SUCCESS);

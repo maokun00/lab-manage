@@ -2,13 +2,26 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.lab.manage.mapper.SysRoleMapper">
 
-    <select id="findList" resultType="com.lab.manage.domain.SysRole">
-        SELECT id,`name`,create_time createTime,create_by createBy,update_time updateTime,update_by updateBy
+    <select id="findList" resultType="com.lab.manage.result.SysRoleResult">
+        SELECT id,`name`,company_id companyId,create_time createTime,create_by createBy,update_time updateTime,update_by updateBy
         FROM sys_role
         <where>
             <if test="name != null and name != ''">`name` = #{name}</if>
+            <if test="companyId != null">AND company_id = #{companyId}</if>
         </where>
         ORDER BY create_time DESC
+    </select>
+
+    <select id="findById" resultType="com.lab.manage.result.SysRoleResult">
+      SELECT id,`name`,company_id companyId,create_time createTime,create_by createBy,update_time updateTime,update_by updateBy
+      FROM sys_role
+      WHERE id = #{id}
+    </select>
+
+    <select id="findNoCompanyRoleList" resultType="com.lab.manage.domain.SysRole">
+      SELECT id,`name`
+      FROM sys_role
+      WHERE company_id IS NULL
     </select>
 
     <select id="findByUserId" resultType="java.lang.Integer">
@@ -22,5 +35,16 @@
       FROM sys_menu_role
       WHERE role_id = #{id}
     </select>
+
+    <delete id="removeByRoleId">
+      DELETE FROM sys_menu_role WHERE role_id = #{id}
+    </delete>
+
+    <insert id="treeSubmit">
+        INSERT INTO sys_menu_role(menu_id,role_id) VALUES
+        <foreach collection="treeIds" item="item" separator=",">
+            (#{item},#{roleId})
+        </foreach>
+    </insert>
 
 </mapper>

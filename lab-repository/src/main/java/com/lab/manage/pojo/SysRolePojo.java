@@ -8,4 +8,17 @@ import com.lab.manage.domain.SysRole;
  */
 @TableName("sys_role")
 public class SysRolePojo extends SysRole {
+
+    public SysRolePojo() {
+    }
+
+    public SysRolePojo(SysRole sysRole) {
+        this.setCompanyId(sysRole.getCompanyId());
+        this.setCreateBy(sysRole.getCreateBy());
+        this.setCreateTime(sysRole.getCreateTime());
+        this.setId(sysRole.getId());
+        this.setName(sysRole.getName());
+        this.setUpdateBy(sysRole.getUpdateBy());
+        this.setUpdateTime(sysRole.getUpdateTime());
+    }
 }

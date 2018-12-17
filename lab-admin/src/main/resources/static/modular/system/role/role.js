@@ -17,9 +17,7 @@ Role.initColumn = function () {
         {field: 'selectItem', radio: true},
         {title: 'id', field: 'id', visible: false, align: 'center', valign: 'middle'},
         {title: '菜单名称', field: 'name', align: 'center', valign: 'middle', sortable: true},
-        {title: '授权', field: 'perms', align: 'center', valign: 'middle', sortable: true},
-        {title: '请求地址', field: 'url', align: 'center', valign: 'middle', sortable: true},
-        {title: '排序', field: 'orderNum', align: 'center', valign: 'middle', sortable: true}]
+        {title: '所属公司', field: 'companyName', align: 'center', valign: 'middle', sortable: true}]
     return columns;
 };
 
@@ -49,7 +47,7 @@ Role.openAddRole = function () {
         area: ['800px', '450px'], //宽高
         fix: false, //不固定
         maxmin: true,
-        content: Feng.ctxPath + '/sys/Role/Role_add'
+        content: Feng.ctxPath + '/sys/role/role_add'
     });
     this.layerIndex = index;
 };
@@ -65,43 +63,12 @@ Role.openChangeRole = function () {
             area: ['800px', '450px'], //宽高
             fix: false, //不固定
             maxmin: true,
-            content: Feng.ctxPath + '/sys/Role/Role_edit/' + this.seItem.id
+            content: Feng.ctxPath + '/sys/role/role_edit/' + this.seItem.id
         });
         this.layerIndex = index;
     }
 };
 
-/**
- * 删除
- */
-Role.delRole = function () {
-    if (this.check()) {
-        var id = Role.seItem.id;
-        layer.confirm('确定要删除该菜单？', {
-            btn: ['确定','取消'] //按钮
-        }, function(){
-            $.ajax({
-                type : "POST",
-                url : "/sys/Role/remove/" + id,
-                async : false,
-                success : function(data) {
-                    if(data.status == 10000){
-                        layer.msg('操作成功');
-                        Role.table.refresh();
-                    }else{
-                        layer.alert(data.message);
-                    }
-                },
-                error : function(error) {
-                    layer.msg('系统错误！', {
-                        icon : 2,
-                        time : 1500
-                    })
-                }
-            })
-        }, function(){});
-    }
-};
 
 /**
  * 搜索

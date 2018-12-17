@@ -17,9 +17,15 @@
                     </div>
                     <div class="col-sm-12">
                         <div class="hidden-xs" id="menuTableToolbar" role="group">
-                            <button type="button" class="btn btn-primary" onclick="Menu.openAddMenu()">添  加</button>
-                            <button type="button" class="btn btn-primary" onclick="Menu.openChangeMenu()">修改</button>
-                            <button type="button" class="btn btn-danger" onclick="Menu.delMenu()">删  除</button>
+                            @if(shiro.hasPermission("sys:menu:add")){
+                                <button type="button" class="btn btn-primary" onclick="Menu.openAddMenu()">添  加</button>
+                            @}
+                            @if(shiro.hasPermission("sys:menu:edit")){
+                                <button type="button" class="btn btn-primary" onclick="Menu.openChangeMenu()">修改</button>
+                            @}
+                            @if(shiro.hasPermission("sys:menu:remove")){
+                                <button type="button" class="btn btn-danger" onclick="Menu.delMenu()">删  除</button>
+                            @}
                         </div>
                         <table id="menuTable"/>
                     </div>

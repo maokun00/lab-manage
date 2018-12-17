@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.lab.manage.domain.SysRole;
 import com.lab.manage.form.SysRoleForm;
 import com.lab.manage.pojo.SysRolePojo;
+import com.lab.manage.result.SysRoleResult;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -16,5 +18,13 @@ public interface SysRoleMapper extends BaseMapper<SysRolePojo> {
 
     List<Integer> findTreeById(Integer roleId);
 
-    List<SysRole> findList(SysRoleForm sysRoleForm);
+    List<SysRoleResult> findList(SysRoleForm sysRoleForm);
+
+    List<SysRole> findNoCompanyRoleList();
+
+    void removeByRoleId(Integer role);
+
+    void treeSubmit(@Param("roleId") Integer role, @Param("treeIds") String[] treeIds);
+
+    SysRoleResult findById(Integer roleId);
 }

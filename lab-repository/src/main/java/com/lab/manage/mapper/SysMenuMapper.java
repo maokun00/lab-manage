@@ -26,4 +26,10 @@ public interface SysMenuMapper extends BaseMapper<SysMenuPojo> {
     List<SysMenuResult> findByParentId(Integer menuId);
 
     List<TreeMenu> findTreeByCompanyId(Integer companyId);
+
+    void deleteRoleMenu(Integer menuId);
+
+    void deleteCompanyMenu(Integer menuId);
+
+    List<SysMenuResult> findByParentIdAndRoleId(@Param("parentId") Integer parentId, @Param("roleId") List<Integer> roleId);
 }

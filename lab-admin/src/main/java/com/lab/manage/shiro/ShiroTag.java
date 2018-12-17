@@ -15,24 +15,6 @@ public class ShiroTag {
 
 
     /**
-     * 验证是否有权限
-     * @param perms
-     * @return
-     */
-    public boolean hasRoleByString(String perms){
-        Subject subject = getSubject();
-        if(subject == null || subject.getPrincipal() == null) return false;
-//        SysUser user = (SysUser) subject.getPrincipal();
-//        SysMenuMapper mapper = SpringUtil.getBean(SysMenuMapper.class);
-//        SysMenu resource = mapper.findResource(user.getUserId(), perms);
-//        if(resource != null){
-//            return true;
-//        }
-        return false;
-    }
-
-
-    /**
      * The user tag
      *
      * @return

@@ -2,8 +2,10 @@ package com.lab.manage.service;
 
 import com.lab.manage.domain.Response;
 import com.lab.manage.domain.SysMenu;
+import com.lab.manage.domain.SysUser;
 import com.lab.manage.domain.TreeMenu;
 import com.lab.manage.form.SysMenuForm;
+import com.lab.manage.result.IndexMenu;
 import com.lab.manage.result.SysMenuResult;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -41,4 +43,7 @@ public interface SysMenuService {
 
     @RequestMapping("/service/sys/menu/remove")
     Object remove(@RequestParam("memuId") Integer menuId);
+
+    @RequestMapping("/service/sys/menu/indexMenu")
+    List<IndexMenu> indexMenu(@RequestParam("userId") Integer userId);
 }

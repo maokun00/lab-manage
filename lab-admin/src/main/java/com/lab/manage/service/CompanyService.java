@@ -27,4 +27,7 @@ public interface CompanyService {
 
     @RequestMapping("/service/sys/company/editCompany")
     void editCompany(Company company);
+
+    @RequestMapping("/service/sys/company/roleSubmit")
+    void roleSubmit(@RequestParam("companyId") Integer companyId, @RequestParam("roleIds") String[] roleIds);
 }

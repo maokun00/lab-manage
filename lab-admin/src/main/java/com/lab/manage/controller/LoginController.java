@@ -3,6 +3,9 @@ package com.lab.manage.controller;
 import com.lab.manage.domain.Response;
 import com.lab.manage.domain.SysUser;
 import com.lab.manage.form.SysUserForm;
+import com.lab.manage.result.IndexMenu;
+import com.lab.manage.service.SysMenuService;
+import com.lab.manage.service.SysRoleService;
 import com.lab.manage.service.SysUserService;
 import com.lab.manage.shiro.ShiroUtils;
 import com.lab.manage.util.CreateImageCode;
@@ -25,6 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Created by Chengcheng on 2018/12/12.
@@ -34,6 +38,8 @@ public class LoginController extends AbstractController{
 
     @Autowired
     private SysUserService sysUserService;
+    @Autowired
+    private SysMenuService sysMenuService;
 
     @Value("${domain.path}")
     private String domainPath;
@@ -48,7 +54,9 @@ public class LoginController extends AbstractController{
     @RequestMapping("/index")
     public String index(Model model){
         SysUser userEntity = ShiroUtils.getUserEntity();
+        List<IndexMenu> menuList = sysMenuService.indexMenu(userEntity.getId());
         model.addAttribute("userName",userEntity.getNickname());
+        model.addAttribute("menuList",menuList);
         return "index.html";
     }
 

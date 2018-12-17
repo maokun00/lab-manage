@@ -29,6 +29,19 @@
         WHERE id = #{id}
     </select>
 
+    <select id="findByParentIdAndRoleId" resultMap="BaseResultMapResult">
+      SELECT id,`name`,url
+      FROM sys_menu
+      WHERE parent_id = #{parentId} AND id IN (
+          SELECT DISTINCT menu_id
+          FROM sys_menu_role
+          WHERE role_id IN
+            <foreach collection="roleId" open="(" close=")" item="item" separator=",">
+                #{item}
+            </foreach>
+      )
+    </select>
+
     <select id="findTree" resultType="com.lab.manage.domain.TreeMenu">
       SELECT id,parent_id AS 'pId',`name`
       FROM sys_menu
@@ -68,5 +81,13 @@
         FROM sys_menu
         WHERE parent_id = #{id}
     </select>
+    
+    <delete id="deleteRoleMenu">
+      DELETE FROM sys_menu_role WHERE menu_id = #{id}
+    </delete>
+
+    <delete id="deleteCompanyMenu">
+      DELETE FROM sys_menu_company WHERE menu_id = #{id}
+    </delete>
 
 </mapper>

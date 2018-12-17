@@ -48,6 +48,8 @@ public class UserRealm extends AuthorizingRealm {
             permsList = sysMenuService.queryAllPerms(userId);
         }
 
+
+
         //用户权限列表
         Set<String> permsSet = new HashSet<>();
         for(String perms : permsList){

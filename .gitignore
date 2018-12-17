@@ -147,3 +147,4 @@ vcs.xml
 /**.iml
 *.iml
 *.gz
+*.tmp

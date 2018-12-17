@@ -9,6 +9,7 @@ import com.lab.manage.result.SysMenuResult;
 import com.lab.manage.service.SysMenuService;
 import com.lab.manage.shiro.ShiroUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -62,6 +63,7 @@ public class SysMenuController extends AbstractController{
 
     @MyLog(requestUrl = "添加菜单")
     @RequestMapping("/add")
+    @RequiresPermissions("sys:menu:add")
     @ResponseBody
     public Response addMenu(SysMenu sysMenu){
         if(checkParam(sysMenu) != null) return checkParam(sysMenu);
@@ -73,6 +75,7 @@ public class SysMenuController extends AbstractController{
 
     @MyLog(requestUrl = "修改菜单")
     @RequestMapping("/edit")
+    @RequiresPermissions("sys:menu:edit")
     @ResponseBody
     public Object editMenu(SysMenu sysMenu){
         if(checkParam(sysMenu) != null) return checkParam(sysMenu);
@@ -83,6 +86,7 @@ public class SysMenuController extends AbstractController{
 
     @MyLog(requestUrl = "删除菜单")
     @RequestMapping("/remove/{menuId}")
+    @RequiresPermissions("sys:menu:remove")
     @ResponseBody
     public Object removeMenu(@PathVariable("menuId") Integer menuId){
         return sysMenuService.remove(menuId);

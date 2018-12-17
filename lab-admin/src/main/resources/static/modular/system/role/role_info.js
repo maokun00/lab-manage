@@ -37,9 +37,11 @@ RoleInfoDlg.addSubmit = function () {
                     skin: 'layui-layer-molv' //样式类名
                     ,closeBtn: 0
                 }, function(){
-                    window.parent.Menu.table.refresh();
+                    window.parent.Role.table.refresh();
                     RoleInfoDlg.close();
                 });
+            }else{
+                layer.msg(data.message)
             }
         },
         error : function(error) {
@@ -55,36 +57,11 @@ RoleInfoDlg.addSubmit = function () {
  * 提交修改
  */
 RoleInfoDlg.editSubmit = function () {
-    var parentId;
-    var zTree = $.fn.zTree.getZTreeObj("parent");
-    var nodes = zTree.getSelectedNodes();
-    if(nodes.length == 0){
-        parentId = $("#parentId").val();
-    }else {
-        parentId = nodes[0].id;
-    }
-    var id = $("#id").val();
-    var name = $("#menuName").val();
-    var type = $("#ismenu").val();
-    var perms = $("#perms").val();
-    var url = $("#url").val();
-    var orderNum = $("#orderNum").val();
-    var parent = $("#parentId").val();
-
-    var form = {
-        id : id,
-        parentId : parentId,
-        name : name,
-        type : type,
-        orderNum : orderNum,
-        perms :perms,
-        url : url
-    }
-
+    var form = $("#roleForm");
     $.ajax({
         type : "POST",
-        data : form,
-        url : "/sys/menu/edit",
+        data : form.serialize(),
+        url : "/sys/role/edit",
         async : false,
         success : function(data) {
             if(data.status == 10000){
@@ -92,11 +69,11 @@ RoleInfoDlg.editSubmit = function () {
                     skin: 'layui-layer-molv' //样式类名
                     ,closeBtn: 0
                 }, function(){
-                    window.parent.Menu.table.refresh();
+                    window.parent.Role.table.refresh();
                     RoleInfoDlg.close();
                 });
             }else{
-                layer.alert(data.message)
+                layer.msg(data.message)
             }
         },
         error : function(error) {
@@ -108,20 +85,6 @@ RoleInfoDlg.editSubmit = function () {
     })
 }
 
-
-var setting = {
-    view: {
-        selectedMulti: false //是否允许多选
-    },
-    data: {
-        simpleData: {
-            enable: true
-        }
-    },
-    callback:{
-        onClick: onClick
-    }
-};
 
 $(function () {
 
