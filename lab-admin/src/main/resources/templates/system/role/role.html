@@ -24,7 +24,7 @@
                                 <button type="button" class="btn btn-primary" onclick="Role.openChangeRole()">修改</button>
                             @}
                             @if(shiro.hasPermission("sys:role:menu")){
-                                <button type="button" class="btn btn-info" data-toggle="modal" onclick="GetTree()">权限</button>
+                                <button type="button" class="btn btn-warning" data-toggle="modal" onclick="GetTree()">权限</button>
                             @}
                         </div>
                         <table id="RoleTable"/>

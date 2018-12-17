@@ -3,9 +3,32 @@
 <mapper namespace="com.lab.manage.mapper.SysUserMapper">
 
     <select id="findByUsername" resultType="com.lab.manage.domain.SysUser">
-        SELECT *
+        SELECT id,username,password,nickname,mobile,salt,status,company_id companyId
         FROM sys_user
         WHERE username = #{username}
     </select>
+
+    <select id="findNoCompanyUser" resultType="com.lab.manage.domain.SysUser">
+        SELECT id,username,nickname
+        FROM sys_user
+        WHERE company_id IS NULL
+    </select>
+
+    <select id="findById" resultType="com.lab.manage.result.SysUserResult">
+        SELECT id,username,password,nickname,mobile,company_id companyId,status
+        FROM sys_user
+        WHERE id = #{id}
+    </select>
+
+    <select id="findList" resultType="com.lab.manage.result.SysUserResult">
+        SELECT id,username,nickname,mobile,company_id companyId,status
+        FROM sys_user
+        <where>
+            <if test="nickname != null and nickname != ''">nickname = #{nickname}</if>
+            <if test="companyId != null">AND company_id = #{companyId} OR company_id IS NULL</if>
+        </where>
+        ORDER BY create_time DESC
+    </select>
+
 
 </mapper>

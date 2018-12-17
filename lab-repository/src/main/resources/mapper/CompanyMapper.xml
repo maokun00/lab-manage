@@ -6,6 +6,7 @@
         <id column="id" property="id"/>
         <result column="name" property="name"/>
         <result column="person" property="person"/>
+        <result column="admin" property="admin"/>
         <result column="person_mobile" property="personMobile"/>
         <result column="public_key" property="publicKey"/>
         <result column="private_key" property="privateKey"/>
@@ -25,7 +26,7 @@
     </select>
 
     <select id="findById" resultMap="BaseResultMapResult">
-      SELECT id,name,person,person_mobile,end_time
+      SELECT id,name,person,person_mobile,end_time,`admin`
       FROM company
       WHERE id = #{id}
     </select>

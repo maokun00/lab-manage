@@ -27,4 +27,6 @@ public interface SysRoleMapper extends BaseMapper<SysRolePojo> {
     void treeSubmit(@Param("roleId") Integer role, @Param("treeIds") String[] treeIds);
 
     SysRoleResult findById(Integer roleId);
+
+    List<SysRole> findByCompanyId(Integer companyId);
 }

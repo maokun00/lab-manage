@@ -5,36 +5,23 @@
 
 			<input type="hidden" id="id" value="">
 
-			<div class="row">
-				<div class="col-sm-6 b-r">
-					<label>账户</label>
-					<input id="account" class="form-control" name="账户" underline="true"/>
-
-					<label>性别</label>
-					<select id="sex" class="form-control" name="性别" underline="true">
-						<option value="1">男</option>
-						<option value="2">女</option>
-					</select>
-
-					<label>密码</label>
-					<input id="password" class="form-control" name="密码" underline="true" type="password"/>
-
-					<label>密码</label>
-					<input id="roleid" class="form-control" name="角色" underline="true"/>
-
-					<label>密码</label>
-					<input id="email" class="form-control" name="邮箱" type="email"/>
-
-				</div>
-				<div class="col-sm-6">
-					<div id="driverInfoContent">
-						<input id="name" class="form-control" name="姓名" underline="true"/>
-
-						<input id="birthday" class="form-control" name="出生日期" underline="true" type="text"/>
-
-						<input id="rePassword" class="form-control" name="确认密码" type="password" underline="true"/>
-
-						<input id="phone" class="form-control" name="电话"/>
+			<div class="modal-body">
+				<div class="row">
+					<div class="form-group">
+						<label for="username" class="control-label">用户名:</label>
+						<input type="text" class="form-control" id="username" name="username">
+					</div>
+					<div class="form-group">
+						<label for="password" class="control-label">密码:</label>
+						<input type="password" class="form-control" id="password" name="password">
+					</div>
+					<div class="form-group">
+						<label for="password" class="control-label">确认密码:</label>
+						<input type="password" id="confirmPassword" name="confirmPassword" class="form-control" placeholder="确认密码">
+					</div>
+					<div class="form-group">
+						<label for="nickname" class="control-label">平台昵称:</label>
+						<input type="text" class="form-control" id="nickname" name="nickname">
 					</div>
 				</div>
 			</div>

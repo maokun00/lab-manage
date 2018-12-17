@@ -21,6 +21,8 @@ public class SysUserForm extends BaseForm{
 
     private String oldPassword;
 
+    private Integer companyId;
+
     public String getUsername() {
         return username;
     }
@@ -83,5 +85,13 @@ public class SysUserForm extends BaseForm{
 
     public void setOldPassword(String oldPassword) {
         this.oldPassword = oldPassword;
+    }
+
+    public Integer getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Integer companyId) {
+        this.companyId = companyId;
     }
 }

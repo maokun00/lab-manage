@@ -42,4 +42,7 @@ public interface SysRoleService {
 
     @RequestMapping("/service/sys/role/findById")
     SysRoleResult findById(@RequestParam("roleId") Integer roleId);
+
+    @RequestMapping("/service/sys/role/findByCompanyId")
+    List<SysRole> findByCompanyId(@RequestParam("companyId") Integer companyId);
 }

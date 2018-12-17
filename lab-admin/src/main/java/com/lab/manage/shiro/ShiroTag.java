@@ -6,6 +6,7 @@ import org.apache.shiro.subject.Subject;
 import java.beans.BeanInfo;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -13,6 +14,10 @@ import java.util.Map;
  */
 public class ShiroTag {
 
+
+    public boolean isEmpty(List list){
+        return list.isEmpty();
+    }
 
     /**
      * The user tag

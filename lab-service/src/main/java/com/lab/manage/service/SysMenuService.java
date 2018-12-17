@@ -71,6 +71,7 @@ public class SysMenuService {
     @RequestMapping("/indexMenu")
     public List<IndexMenu> indexMenu(@RequestParam("userId") Integer userId){
         List<Integer> roleId = sysRoleMapper.findByUserId(userId);
+        if(roleId.isEmpty()) return new ArrayList<>();
         List<IndexMenu> indexMenus = check(0,roleId);
         return indexMenus;
     }

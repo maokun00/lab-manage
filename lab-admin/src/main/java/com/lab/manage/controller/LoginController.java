@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -51,12 +52,22 @@ public class LoginController extends AbstractController{
         return "login.html";
     }
 
+    @RequestMapping("/blackboard")
+    public String blackboard(){
+        return "blackboard.html";
+    }
+
     @RequestMapping("/index")
     public String index(Model model){
         SysUser userEntity = ShiroUtils.getUserEntity();
-        List<IndexMenu> menuList = sysMenuService.indexMenu(userEntity.getId());
+        try {
+            List<IndexMenu> menuList = sysMenuService.indexMenu(userEntity.getId());
+            model.addAttribute("menuList",menuList);
+        } catch (Exception e){
+            List<IndexMenu> menuList = new ArrayList<>();
+            model.addAttribute("menuList",menuList);
+        }
         model.addAttribute("userName",userEntity.getNickname());
-        model.addAttribute("menuList",menuList);
         return "index.html";
     }
 
@@ -134,7 +145,11 @@ public class LoginController extends AbstractController{
             if(user != null){
                 return new Response.Builder(Response.ResponseCode.FAILURE.getNumber()).msg("该用户名已经存在!").build();
             }
-            boolean register = sysUserService.register(sysUser.getUsername(), sysUser.getPassword(), sysUser.getNickname());
+            user = new SysUser();
+            sysUser.setUsername(sysUser.getUsername());
+            sysUser.setPassword(sysUser.getPassword());
+            sysUser.setNickname(sysUser.getNickname());
+            boolean register = sysUserService.register(user);
             if(register){
                 return new Response.Builder(Response.ResponseCode.SUCCESS.getNumber()).data("/login").build();
             }

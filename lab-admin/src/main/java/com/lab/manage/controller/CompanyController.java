@@ -5,6 +5,7 @@ import com.lab.manage.domain.*;
 import com.lab.manage.form.CompanyForm;
 import com.lab.manage.service.CompanyService;
 import com.lab.manage.service.SysRoleService;
+import com.lab.manage.service.SysUserService;
 import com.lab.manage.shiro.ShiroUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -28,11 +29,15 @@ public class CompanyController extends AbstractController {
     private CompanyService companyService;
     @Autowired
     private SysRoleService sysRoleService;
+    @Autowired
+    private SysUserService sysUserService;
 
     @RequestMapping
     public String index(Model model){
         List<SysRole> roles = sysRoleService.findNoCompanyRoleList();
         model.addAttribute("roles",roles);
+        List<SysUser> users = sysUserService.findNoCompanyUser();
+        model.addAttribute("users",users);
         return "system/company/company.html";
     }
 
@@ -92,6 +97,23 @@ public class CompanyController extends AbstractController {
         if(roleIds.length == 0) return this.response(Response.ResponseCode.SUCCESS);
         try {
             companyService.roleSubmit(companyId,roleIds);
+        }catch (Exception e){
+            logger.error("服务异常 {}",e);
+            return this.response(Response.ResponseCode.FAILURE).message("服务异常");
+        }
+        return this.response(Response.ResponseCode.SUCCESS);
+    }
+
+    @MyLog(requestUrl = "公司设置用户")
+    @RequestMapping("/user/submit/{companyId}")
+    @RequiresPermissions("sys:company:user")
+    @ResponseBody
+    public Response userSubmit(@RequestBody String[] userIds,@PathVariable("companyId") Integer companyId){
+        Company company = companyService.findById(companyId);
+        if(company == null) return this.response(Response.ResponseCode.FAILURE).message("请重新选择公司！");
+        if(userIds.length == 0) return this.response(Response.ResponseCode.SUCCESS);
+        try {
+            companyService.userSubmit(companyId,userIds);
         }catch (Exception e){
             logger.error("服务异常 {}",e);
             return this.response(Response.ResponseCode.FAILURE).message("服务异常");

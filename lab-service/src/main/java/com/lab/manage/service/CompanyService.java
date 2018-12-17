@@ -6,8 +6,10 @@ import com.lab.manage.domain.Company;
 import com.lab.manage.form.CompanyForm;
 import com.lab.manage.mapper.CompanyMapper;
 import com.lab.manage.mapper.SysRoleMapper;
+import com.lab.manage.mapper.SysUserMapper;
 import com.lab.manage.pojo.CompanyPojo;
 import com.lab.manage.pojo.SysRolePojo;
+import com.lab.manage.pojo.SysUserPojo;
 import com.lab.manage.result.CompanyResult;
 import com.lab.manage.util.EncryptionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,8 @@ public class CompanyService {
     private CompanyMapper companyMapper;
     @Autowired
     private SysRoleMapper sysRoleMapper;
+    @Autowired
+    private SysUserMapper sysUserMapper;
 
     /**
      * @Author Chengcheng
@@ -79,6 +83,24 @@ public class CompanyService {
             if(sysRolePojo != null && sysRolePojo.getCompanyId() == null){
                 sysRolePojo.setCompanyId(companyId);
                 sysRoleMapper.updateById(sysRolePojo);
+            }
+        }
+    }
+
+    /**
+     * @Author Chengcheng
+     * @Description : 给用户设置公司
+     * @Date 2018/12/17 下午5:23
+     */
+    @RequestMapping("/userSubmit")
+    @Transactional
+    public void userSubmit(@RequestParam("companyId") Integer companyId, @RequestParam("userIds") String[] userIds){
+        for(String idStr : userIds){
+            int userId = Integer.parseInt(idStr);
+            SysUserPojo pojo = sysUserMapper.selectById(userId);
+            if(pojo.getCompanyId() == null){
+                pojo.setCompanyId(companyId);
+                sysUserMapper.updateById(pojo);
             }
         }
     }

@@ -18,6 +18,12 @@
       WHERE id = #{id}
     </select>
 
+    <select id="findByCompanyId" resultType="com.lab.manage.domain.SysRole">
+      SELECT id,`name`
+      FROM sys_role
+      WHERE company_id = #{id}
+    </select>
+
     <select id="findNoCompanyRoleList" resultType="com.lab.manage.domain.SysRole">
       SELECT id,`name`
       FROM sys_role

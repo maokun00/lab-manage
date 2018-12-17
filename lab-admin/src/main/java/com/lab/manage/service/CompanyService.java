@@ -30,4 +30,7 @@ public interface CompanyService {
 
     @RequestMapping("/service/sys/company/roleSubmit")
     void roleSubmit(@RequestParam("companyId") Integer companyId, @RequestParam("roleIds") String[] roleIds);
+
+    @RequestMapping("/service/sys/company/userSubmit")
+    void userSubmit(@RequestParam("companyId") Integer companyId, @RequestParam("userIds") String[] userIds);
 }

@@ -27,6 +27,8 @@ public class Company extends BaseDomain {
 
     private String personMobile;
 
+    private Integer admin;
+
     public Integer getId() {
         return id;
     }
@@ -81,5 +83,13 @@ public class Company extends BaseDomain {
 
     public void setPersonMobile(String personMobile) {
         this.personMobile = personMobile;
+    }
+
+    public Integer getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(Integer admin) {
+        this.admin = admin;
     }
 }

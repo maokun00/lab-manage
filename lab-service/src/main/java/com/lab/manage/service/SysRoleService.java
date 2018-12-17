@@ -42,6 +42,10 @@ public class SysRoleService {
     @RequestMapping("/findList")
     public Object findList(@RequestBody SysRoleForm sysRoleForm){
         PageHelper.startPage(sysRoleForm.getOffset(),sysRoleForm.getLimit());
+        CompanyResult cr = companyMapper.findById(sysRoleForm.getCompanyId());
+        if(cr != null && cr.getAdmin() == 1){
+            sysRoleForm.setCompanyId(null);
+        }
         List<SysRoleResult> results = sysRoleMapper.findList(sysRoleForm);
         for(SysRoleResult result : results){
             Integer companyId = result.getCompanyId();
@@ -163,6 +167,16 @@ public class SysRoleService {
             }
         }
         return menuList;
+    }
+
+    /**
+     * @Author Chengcheng
+     * @Description : 根据公司id查询角色
+     * @Date 2018/12/17 下午5:33
+     */
+    @RequestMapping("/findByCompanyId")
+    public List<SysRole> findByCompanyId(@RequestParam("companyId") Integer companyId){
+        return sysRoleMapper.findByCompanyId(companyId);
     }
 
 }

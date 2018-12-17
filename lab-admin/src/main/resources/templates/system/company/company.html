@@ -7,29 +7,26 @@
             </div>
             <div class="ibox-content">
                 <div class="row row-lg">
-                    <div class="col-sm-3">
-                        <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Search for...">
-                            <span class="input-group-btn">
-                                <button class="btn btn-default" clickFun="Company.search()" type="button">搜索</button>
-                            </span>
+                    <div class="col-sm-12">
+                        <div class="hidden-xs" id="menuTableToolbar">
+                            @if(shiro.hasPermission("sys:company:add")){
+                            <button type="button" class="btn btn-primary" onclick="Company.openAddCompany()">添  加</button>
+                            @}
+                            @if(shiro.hasPermission("sys:company:edit")){
+                            <button type="button" class="btn btn-primary" onclick="Company.openChangeCompany()">修 改</button>
+                            @}
+                            @if(shiro.hasPermission("sys:company:menu")){
+                            <button type="button" class="btn btn-warning" data-toggle="modal" onclick="GetTree()">菜 单</button>
+                            @}
+                            @if(shiro.hasPermission("sys:company:role")){
+                            <button type="button" class="btn btn-warning" data-toggle="modal" onclick="getRole()">角 色</button>
+                            @}
+                            @if(shiro.hasPermission("sys:company:user")){
+                            <button type="button" class="btn btn-info" onclick="getUser()">用 户</button>
+                            @}
                         </div>
                     </div>
                     <div class="col-sm-12">
-                        <div class="hidden-xs col-sm-3" id="menuTableToolbar">
-                            @if(shiro.hasPermission("sys:company:add")){
-                                <button type="button" class="btn btn-primary" onclick="Company.openAddCompany()">添  加</button>
-                            @}
-                            @if(shiro.hasPermission("sys:company:edit")){
-                                <button type="button" class="btn btn-primary" onclick="Company.openChangeCompany()">修 改</button>
-                            @}
-                            @if(shiro.hasPermission("sys:company:menu")){
-                                <button type="button" class="btn btn-info" data-toggle="modal" onclick="GetTree()">菜 单</button>
-                            @}
-                            @if(shiro.hasPermission("sys:company:role")){
-                                <button type="button" class="btn btn-info" data-toggle="modal" onclick="getRole()">角 色</button>
-                            @}
-                        </div>
                         <table id="companyTable"/>
                     </div>
                 </div>
@@ -66,6 +63,9 @@
                 <h4 class="modal-title" id="roleModalLabel">Modal title</h4>
             </div>
             <div class="modal-body">
+                @if(shiro.isEmpty(roles)){
+                    <h4 class="modal-title">暂无可分配角色</h4>
+                @}
                 @for(role in roles){
                     <div class="checkbox">
                         <label>
@@ -77,6 +77,34 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary" onclick="submitRole()">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 用户 -->
+<div class="modal fade" id="userModal" tabindex="-1" role="dialog" aria-labelledby="userModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="userModalLabel">Modal title</h4>
+            </div>
+            <div class="modal-body">
+                @if(shiro.isEmpty(users)){
+                    <h4 class="modal-title">暂无可分配用户</h4>
+                @}
+                @for(user in users){
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" value="${user.id}" name="userId"> ${user.nickname}
+                    </label>
+                </div>
+                @}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="submitUser()">Save changes</button>
             </div>
         </div>
     </div>
@@ -173,6 +201,15 @@
         }
         $("#roleModal").modal('show')
     }
+
+    function getUser() {
+        var selected = $("#companyTable").bootstrapTable('getSelections');
+        if(selected.length == 0){
+            Feng.info("请选择一条记录！")
+            return false;
+        }
+        $("#userModal").modal('show')
+    }
     
     function submitRole() {
         var selected = $("#companyTable").bootstrapTable('getSelections');
@@ -187,6 +224,39 @@
             data: JSON.stringify(ids),
             contentType : "application/json",
             url : "/sys/company/role/submit/" + id,
+            async : false,
+            success : function(data) {
+                if(data.status == 10000){
+                    layer.msg("操作成功！");
+                    window.location.reload();
+                    $("#roleModal").modal('hide')
+                }else{
+                    layer.msg(data.message);
+                }
+            },
+            error : function(error) {
+                layer.msg('系统错误！', {
+                    icon : 2,
+                    time : 1500
+                })
+            }
+        });
+
+    }
+
+    function submitUser() {
+        var selected = $("#companyTable").bootstrapTable('getSelections');
+        var id = selected[0].id;
+        var ids = new Array();
+        var checkboxs = $('[name=userId]:checkbox:checked');
+        for(var i = 0; i < checkboxs.length; i++){
+            ids.push($(checkboxs[i]).val());
+        }
+        $.ajax({
+            type : "POST",
+            data: JSON.stringify(ids),
+            contentType : "application/json",
+            url : "/sys/company/user/submit/" + id,
             async : false,
             success : function(data) {
                 if(data.status == 10000){
