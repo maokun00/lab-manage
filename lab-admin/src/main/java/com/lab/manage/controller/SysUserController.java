@@ -1,6 +1,7 @@
 package com.lab.manage.controller;
 
 import com.lab.manage.config.MyLog;
+import com.lab.manage.domain.Company;
 import com.lab.manage.domain.Response;
 import com.lab.manage.domain.SysRole;
 import com.lab.manage.domain.SysUser;
@@ -14,10 +15,12 @@ import com.lab.manage.service.SysUserService;
 import com.lab.manage.shiro.ShiroUtils;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -45,11 +48,13 @@ public class SysUserController extends AbstractController{
     }
 
     @RequestMapping("/user_add")
+    @RequiresPermissions("sys:user:add")
     public String add(){
         return "system/user/user_add.html";
     }
 
     @RequestMapping("/user_edit/{userId}")
+    @RequiresPermissions("sys:user:edit")
     public String edit(@PathVariable("userId") Integer userId, Model model){
         SysUserResult result = sysUserService.findById(userId);
         model.addAttribute("user",result);
@@ -69,12 +74,43 @@ public class SysUserController extends AbstractController{
 
     @RequestMapping("/role/{userId}")
     public String roleUser(@PathVariable("userId") Integer userId, Model model){
+        SysUserResult result = sysUserService.findById(userId);
+        List<SysRole> roleList = new ArrayList<>();
+        List<Integer> userRoles = new ArrayList<>();
+        if(result != null){
+            Integer companyId = result.getCompanyId();
+            if(companyId != null){
+                CompanyResult companyResult = companyService.findById(companyId);
+                userRoles = sysUserService.findRoleByUserId(userId);
+                roleList = sysRoleService.findByCompanyId(companyResult.getId());
+            }
+        }
+        model.addAttribute("roles",roleList);
+        model.addAttribute("userId",userId);
+        model.addAttribute("userRoles",userRoles);
+        return "system/user/user_role.html";
+    }
 
-        return "";
+    @MyLog(requestUrl = "设置角色")
+    @RequestMapping("/role/submit/{userId}")
+    @RequiresPermissions("sys:user:role")
+    @ResponseBody
+    public Response roleSubmit(@RequestBody String[] roleIds, @PathVariable("userId") Integer userId){
+        SysUserResult user = sysUserService.findById(userId);
+        if(user == null) return this.response(Response.ResponseCode.FAILURE).message("未获取到用户信息！");
+        if(roleIds.length == 0) return this.response(Response.ResponseCode.SUCCESS);
+        try {
+            sysUserService.roleSubmit(userId,roleIds);
+        }catch (Exception e){
+            logger.error("服务异常 {}",e);
+            return this.response(Response.ResponseCode.FAILURE).message("服务异常");
+        }
+        return this.response(Response.ResponseCode.SUCCESS);
     }
 
     @MyLog(requestUrl = "提交用户信息")
     @RequestMapping("/submit")
+    @RequiresPermissions("sys:user:submit")
     @ResponseBody
     public Response submit(SysUser sysUser){
         SysUser username = sysUserService.findByUsername(sysUser.getUsername());
@@ -101,6 +137,7 @@ public class SysUserController extends AbstractController{
 
     @MyLog(requestUrl = "用户设置公司")
     @RequestMapping("/checkCompany/{userId}")
+    @RequiresPermissions("sys:user:checkCompany")
     @ResponseBody
     public Response checkCompany(@PathVariable("userId") Integer userId){
         SysUser userEntity = ShiroUtils.getUserEntity();
@@ -118,6 +155,7 @@ public class SysUserController extends AbstractController{
 
     @MyLog(requestUrl = "禁用用户")
     @RequestMapping("/disable/{userId}")
+    @RequiresPermissions("sys:user:disable")
     @ResponseBody
     public Response disable(@PathVariable("userId") Integer userId){
         SysUser sysUser = new SysUser();
@@ -129,6 +167,7 @@ public class SysUserController extends AbstractController{
 
     @MyLog(requestUrl = "启用用户")
     @RequestMapping("/enable/{userId}")
+    @RequiresPermissions("sys:user:enable")
     @ResponseBody
     public Response enable(@PathVariable("userId") Integer userId){
         SysUser sysUser = new SysUser();
@@ -140,6 +179,7 @@ public class SysUserController extends AbstractController{
 
     @MyLog(requestUrl = "重置密码")
     @RequestMapping("/reset/{userId}")
+    @RequiresPermissions("sys:user:reset")
     @ResponseBody
     public Response reset(@PathVariable("userId") Integer userId){
         SysUser sysUser = new SysUser();

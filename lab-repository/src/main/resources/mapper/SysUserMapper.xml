@@ -30,5 +30,22 @@
         ORDER BY create_time DESC
     </select>
 
+    <select id="findRoleByUserId" resultType="java.lang.Integer">
+        SELECT role_id
+        FROM sys_user_role
+        WHERE user_id = #{id}
+    </select>
+
+    <insert id="roleSubmit">
+        INSERT INTO sys_user_role(user_id,role_id) VALUES
+        <foreach collection="roleIds" item="item" separator=",">
+            (#{userId},#{item})
+        </foreach>
+    </insert>
+
+    <delete id="deleteRoleByUserId">
+        DELETE FROM sys_user_role WHERE user_id = #{id}
+    </delete>
+
 
 </mapper>

@@ -1,5 +1,6 @@
 package com.lab.manage.service;
 
+import com.lab.manage.domain.SysRole;
 import com.lab.manage.domain.SysUser;
 import com.lab.manage.form.SysUserForm;
 import com.lab.manage.result.SysRoleResult;
@@ -34,4 +35,9 @@ public interface SysUserService {
     @RequestMapping("/service/sys/user/findNoCompanyUser")
     List<SysUser> findNoCompanyUser();
 
+    @RequestMapping("/service/sys/user/roleSubmit")
+    void roleSubmit(@RequestParam("userId") Integer userId, @RequestParam("roleIds") String[] roleIds);
+
+    @RequestMapping("/service/sys/user/findRoleByUserId")
+    List<Integer> findRoleByUserId(@RequestParam("userId") Integer userId);
 }

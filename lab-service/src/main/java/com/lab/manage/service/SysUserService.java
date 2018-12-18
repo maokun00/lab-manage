@@ -2,6 +2,7 @@ package com.lab.manage.service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.lab.manage.domain.SysRole;
 import com.lab.manage.domain.SysUser;
 import com.lab.manage.form.SysUserForm;
 import com.lab.manage.mapper.CompanyMapper;
@@ -16,6 +17,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -118,6 +120,28 @@ public class SysUserService {
             return true;
         }
         return false;
+    }
+
+    /**
+     * @Author Chengcheng
+     * @Description : 设置角色
+     * @Date 2018/12/18 上午9:55
+     */
+    @RequestMapping("/roleSubmit")
+    @Transactional
+    public void roleSubmit(@RequestParam("userId") Integer userId, @RequestParam("roleIds") String[] roleIds){
+        sysUserMapper.deleteRoleByUserId(userId);
+        sysUserMapper.roleSubmit(userId,roleIds);
+    }
+
+    /**
+     * @Author Chengcheng
+     * @Description : 根据用户id获取角色列表id
+     * @Date 2018/12/18 上午9:55
+     */
+    @RequestMapping("/findRoleByUserId")
+    public List<Integer> findRoleByUserId(@RequestParam("userId") Integer userId){
+        return sysUserMapper.findRoleByUserId(userId);
     }
 
     /**

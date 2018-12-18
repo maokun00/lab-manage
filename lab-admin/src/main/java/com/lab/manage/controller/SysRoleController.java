@@ -1,12 +1,11 @@
 package com.lab.manage.controller;
 
 import com.lab.manage.config.MyLog;
-import com.lab.manage.domain.Response;
-import com.lab.manage.domain.SysRole;
-import com.lab.manage.domain.SysUser;
-import com.lab.manage.domain.TreeMenu;
+import com.lab.manage.domain.*;
 import com.lab.manage.form.SysRoleForm;
+import com.lab.manage.result.CompanyResult;
 import com.lab.manage.result.SysRoleResult;
+import com.lab.manage.service.CompanyService;
 import com.lab.manage.service.SysMenuService;
 import com.lab.manage.service.SysRoleService;
 import com.lab.manage.shiro.ShiroUtils;
@@ -31,6 +30,8 @@ public class SysRoleController extends AbstractController{
 
     @Autowired
     private SysRoleService sysRoleService;
+    @Autowired
+    private CompanyService companyService;
 
     @RequestMapping
     public String index(){
@@ -94,10 +95,13 @@ public class SysRoleController extends AbstractController{
             SysUser sysUser = ShiroUtils.getUserEntity();
             Integer companyId = sysUser.getCompanyId();
             if(companyId != null){
-                sysUser.setCompanyId(companyId);
+                CompanyResult companyResult = companyService.findById(companyId);
+                if(companyResult != null && companyResult.getAdmin() == 1){}else{
+                    sysRole.setCompanyId(companyId);
+                }
             }
-            sysUser.setCreateBy(sysUser.getNickname());
-            sysUser.setCreateTime(new Date());
+            sysRole.setCreateBy(sysUser.getNickname());
+            sysRole.setCreateTime(new Date());
             sysRoleService.addRole(sysRole);
         } catch (Exception e){
             logger.error("服务异常 {}",e);

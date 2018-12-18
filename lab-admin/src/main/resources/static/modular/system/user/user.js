@@ -52,6 +52,21 @@ MgrUser.openAddMgr = function () {
     this.layerIndex = index;
 };
 
+MgrUser.openChangeRole = function () {
+    if (this.check()) {
+        var index = layer.open({
+            type: 2,
+            title: '设置角色',
+            area: ['800px', '450px'], //宽高
+            fix: false, //不固定
+            maxmin: true,
+            content: Feng.ctxPath + '/sys/user/role/' + this.seItem.id
+        });
+        this.layerIndex = index;
+    }
+};
+
+
 /**
  * 点击修改按钮时
  * @param userId 管理员id

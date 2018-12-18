@@ -5,6 +5,7 @@ import com.lab.manage.domain.SysUser;
 import com.lab.manage.form.SysUserForm;
 import com.lab.manage.pojo.SysUserPojo;
 import com.lab.manage.result.SysUserResult;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -21,4 +22,9 @@ public interface SysUserMapper extends BaseMapper<SysUserPojo>{
 
     List<SysUser> findNoCompanyUser();
 
+    void deleteRoleByUserId(Integer userId);
+
+    void roleSubmit(@Param("userId") Integer userId, @Param("roleIds") String[] roleIds);
+
+    List<Integer> findRoleByUserId(Integer userId);
 }
