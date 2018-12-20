@@ -105,9 +105,9 @@
 					<div class="col-sm-4">
 						<input class="form-control" id="detectionPurpose" name="detectionPurpose" type="text" placeholder="root"/>
 					</div>
-					<label class="col-sm-2 control-label" for="aptitudeType">资质管理</label>
+					<label class="col-sm-2 control-label" for="aptitudeType">所需资质</label>
 					<div class="col-sm-4">
-						<select id="aptitudeType" name="aptitudeType" class="form-control">
+						<select id="aptitudeType" name="aptitudeType" class="form-control selectpicker" multiple data-max-options="2">
 							@for(aptitude in aptitudeType){
 								<option value="${aptitude.value}">${aptitude.label}</option>
 							@}
