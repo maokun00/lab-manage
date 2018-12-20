@@ -40,6 +40,7 @@
                 #{item}
             </foreach>
       )
+        ORDER BY order_num
     </select>
 
     <select id="findTree" resultType="com.lab.manage.domain.TreeMenu">

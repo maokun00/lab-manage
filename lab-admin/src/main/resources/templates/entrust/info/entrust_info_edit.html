@@ -1,0 +1,23 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <form id="roleForm">
+            <input type="hidden" name="id" value="${role.id}">
+            <div class="form-horizontal" id="menuInfoForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="name" class="control-label">角色名称:</label>
+                            <input type="text" class="form-control" id="name" name="name" value="${role.name}">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary"  onclick="RoleInfoDlg.editSubmit()">Save changes</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/system/role/role_info.js"></script>
+@}

@@ -1,0 +1,252 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+	<div class="ibox-content">
+		<form class="form-horizontal" role="entrustForm">
+			<fieldset>
+				<legend>委托单位:</legend>
+				<div class="form-group">
+					<label class="col-sm-2 control-label" for="companyName">委托单位名称</label>
+					<div class="col-sm-4">
+						<input class="form-control" id="companyName" name="companyName" type="text"/>
+					</div>
+					<label class="col-sm-2 control-label" for="memberName">联系人</label>
+					<div class="col-sm-4">
+						<input class="form-control" id="memberName" name="memberName" type="text" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label" for="memberMobile">联系电话</label>
+					<div class="col-sm-4">
+						<input class="form-control" id="memberMobile" name="memberMobile" type="text" />
+					</div>
+					<label class="col-sm-2 control-label" for="email">联系邮箱</label>
+					<div class="col-sm-4">
+						<input class="form-control" id="email" name="email" type="text" placeholder="msh"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label" for="fax">传真</label>
+					<div class="col-sm-4">
+						<input class="form-control" id="fax" name="fax" type="text" />
+					</div>
+					<label class="col-sm-2 control-label" for="cityId">省、市、区</label>
+					<div class="col-sm-4">
+						<input class="form-control" id="cityId" name="cityId" type="text" placeholder="msh"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label" for="memberLocation">街道</label>
+					<div class="col-sm-4">
+						<input class="form-control" id="memberLocation" name="memberLocation" type="text" />
+					</div>
+					<label class="col-sm-2 control-label" for="memberSource">客户来源</label>
+					<div class="col-sm-4">
+						<input class="form-control" id="memberSource" name="memberSource" type="text"/>
+					</div>
+				</div>
+			</fieldset>
+			<fieldset>
+				<legend>受检单位:</legend>
+				<div class="form-group">
+					<label class="col-sm-2 control-label" for="unionCompanyName">受检单位名称</label>
+					<div class="col-sm-4">
+						<input class="form-control" id="unionCompanyName" name="unionCompanyName" type="text"/>
+					</div>
+					<label class="col-sm-2 control-label" for="unionMemberName">联系人</label>
+					<div class="col-sm-4">
+						<input class="form-control" id="unionMemberName" name="unionMemberName" type="text" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label" for="unionMemberMobile">联系电话</label>
+					<div class="col-sm-4">
+						<input class="form-control" id="unionMemberMobile" name="unionMemberMobile" type="text" />
+					</div>
+					<label class="col-sm-2 control-label" for="unionCityId">省、市、区</label>
+					<div class="col-sm-4">
+						<input class="form-control" id="unionCityId" name="unionCityId" type="text" placeholder="msh"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label" for="unionMemberLocation">街道</label>
+					<div class="col-sm-4">
+						<input class="form-control" id="unionMemberLocation" name="unionMemberLocation" type="text" />
+					</div>
+				</div>
+			</fieldset>
+			<fieldset>
+				<legend>委托基本信息</legend>
+				<div class="form-group">
+					<label class="col-sm-2 control-label" for="name">委托项目</label>
+					<div class="col-sm-4">
+						<input class="form-control" id="name" name="name" type="text" />
+					</div>
+					<label class="col-sm-2 control-label" for="num">委托编号</label>
+					<div class="col-sm-4">
+						<input class="form-control" id="num" name="num" type="text" placeholder="留空白可自动生成"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label" for="detectionType">检测类型</label>
+					<div class="col-sm-4">
+						<select id="detectionType" name="detectionType" class="form-control">
+							@for(detection in detectionType){
+								<option value="${detection.value}">${detection.label}</option>
+							@}
+						</select>
+					</div>
+					<label class="col-sm-2 control-label" for="source">委托来源</label>
+					<div class="col-sm-4">
+						<input class="form-control" id="source" name="source" type="text" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label" for="detectionPurpose">检验目的</label>
+					<div class="col-sm-4">
+						<input class="form-control" id="detectionPurpose" name="detectionPurpose" type="text" placeholder="root"/>
+					</div>
+					<label class="col-sm-2 control-label" for="aptitudeType">资质管理</label>
+					<div class="col-sm-4">
+						<select id="aptitudeType" name="aptitudeType" class="form-control">
+							@for(aptitude in aptitudeType){
+								<option value="${aptitude.value}">${aptitude.label}</option>
+							@}
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label" for="serviceType">服务类型</label>
+					<div class="col-sm-4">
+						<select id="serviceType" name="serviceType" class="form-control">
+							@for(service in serviceType){
+							<option value="${service.value}">${service.label}</option>
+							@}
+						</select>
+					</div>
+					<label class="col-sm-2 control-label" for="dayCount">执行期限（天）</label>
+					<div class="col-sm-4">
+						<input class="form-control" id="dayCount" name="dayCount" type="text" placeholder="1（天）"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label" for="startTime">预计开始时间</label>
+					<div class="col-sm-4">
+						<input class="form-control form_datetime" id="startTime" name="startTime" readonly type="text" />
+					</div>
+					<label class="col-sm-2 control-label" for="entTime">预计出报告时间</label>
+					<div class="col-sm-4">
+						<input class="form-control form_datetime" id="entTime" name="entTime" readonly type="text" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label" for="dataTime">数据出具日期</label>
+					<div class="col-sm-4">
+						<input class="form-control form_datetime" id="dataTime" name="dataTime" readonly type="text" />
+					</div>
+					<label class="col-sm-2 control-label" for="signTime">签订日期</label>
+					<div class="col-sm-4">
+						<input class="form-control form_datetime" id="signTime" name="signTime" readonly type="text" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label" for="toSampleTime">到样日期</label>
+					<div class="col-sm-4">
+						<input class="form-control form_datetime" id="toSampleTime" name="toSampleTime" readonly type="text" />
+					</div>
+					<label class="col-sm-2 control-label" for="money">委托金额</label>
+					<div class="col-sm-4">
+						<input class="form-control" id="money" name="money" type="text" placeholder="100.25"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label" for="residualType">余样处置</label>
+					<div class="col-sm-4">
+						<select id="residualType" name="residualType" class="form-control">
+							@for(residual in residualType){
+							<option value="${residual.value}">${residual.label}</option>
+							@}
+						</select>
+					</div>
+					<label class="col-sm-2 control-label" for="residualTime">留样时间</label>
+					<div class="col-sm-4">
+						<input class="form-control form_datetime" id="residualTime" name="residualTime" readonly type="text" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label" for="moenyTime">最晚付款时间</label>
+					<div class="col-sm-4">
+						<input class="form-control form_datetime" id="moenyTime" name="moenyTime" readonly type="text" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label" for="sampleType">采样类型</label>
+					<div class="col-sm-4">
+						<select id="sampleType" name="sampleType" class="form-control">
+							@for(sample in sampleType){
+							<option value="${sample.value}">${sample.label}</option>
+							@}
+						</select>
+					</div>
+					<label class="col-sm-2 control-label" for="toSubcontract">是否分包</label>
+					<div class="col-sm-4">
+						<select class="form-control" id="toSubcontract" name="toSubcontract">
+							<option value="1">是</option>
+							<option value="2">否</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label" for="determine">是否判定</label>
+					<div class="col-sm-4">
+						<select class="form-control" id="determine" name="determine">
+							<option value="1">是</option>
+							<option value="2">否</option>
+						</select>
+					</div>
+					<label class="col-sm-2 control-label" for="standardMethod">使用非标方法</label>
+					<div class="col-sm-4">
+						<select class="form-control" id="standardMethod" name="standardMethod">
+							<option value="1">是</option>
+							<option value="2">否</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label" for="content">备注</label>
+					<div class="col-sm-10">
+						<textarea class="form-control" id="content" name="content" ></textarea>
+					</div>
+				</div>
+			</fieldset>
+
+			<fieldset>
+				<legend>报告要求信息：</legend>
+				<div class="form-group">
+					<label class="col-sm-2 control-label" for="ds_host">主机名</label>
+					<div class="col-sm-4">
+						<input class="form-control" id="ds_host" type="text" placeholder="192.168.1.161"/>
+					</div>
+					<label class="col-sm-2 control-label" for="ds_name">数据库名</label>
+					<div class="col-sm-4">
+						<input class="form-control" id="ds_name" type="text" placeholder="msh"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label" for="ds_username">用户名</label>
+					<div class="col-sm-4">
+						<input class="form-control" id="ds_username" type="text" placeholder="root"/>
+					</div>
+					<label class="col-sm-2 control-label" for="ds_password">密码</label>
+					<div class="col-sm-4">
+						<input class="form-control" id="ds_password" type="password" placeholder="123456"/>
+					</div>
+				</div>
+			</fieldset>
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+    $(".form_datetime").datetimepicker({format: 'yyyy-mm-dd hh:ii:ss'});
+</script>
+<script src="${ctxPath}/static/modular/entrust/entrust_info.js"></script>
+@}

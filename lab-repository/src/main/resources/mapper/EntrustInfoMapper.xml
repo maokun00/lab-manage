@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lab.manage.mapper.EntrustInfoMapper">
+
+    <resultMap id="BaseResultMap" type="com.lab.manage.domain.EntrustInfo">
+        <id column="id" property="id"/>
+        <result column="member_id" property="memberId"/>
+        <result column="union_member_id" property="unionMemberId"/>
+        <result column="name" property="name"/>
+        <result column="num" property="num"/>
+        <result column="detection_type" property="detectionType"/>
+        <result column="source" property="source"/>
+        <result column="detection_purpose" property="detectionPurpose"/>
+        <result column="aptitude_type" property="aptitudeType"/>
+        <result column="service_type" property="serviceType"/>
+        <result column="day_count" property="dayCount"/>
+        <result column="start_time" property="startTime"/>
+        <result column="ent_time" property="entTime"/>
+        <result column="data_time" property="dataTime"/>
+        <result column="sign_time" property="signTime"/>
+        <result column="to_sample_time" property="toSampleTime"/>
+        <result column="money" property="money"/>
+        <result column="residual_type" property="residualType"/>
+        <result column="residual_time" property="residualTime"/>
+        <result column="moeny_time" property="moenyTime"/>
+        <result column="content" property="content"/>
+        <result column="status" property="status"/>
+        <result column="sample_type" property="sampleType"/>
+        <result column="to_subcontract" property="toSubcontract"/>
+        <result column="determine" property="determine"/>
+        <result column="standard_method" property="standardMethod"/>
+        <result column="create_time" property="createTime"/>
+        <result column="create_by" property="createBy"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="update_by" property="updateBy"/>
+    </resultMap>
+    
+    <resultMap id="BaseResultMapResult" type="com.lab.manage.result.EntrustResult" extends="BaseResultMap"/>
+
+    <sql id="Base_Column_List">
+        id,member_id,union_member_id,`name`,num,detection_type,source,detection_purpose,aptitude_type,
+        service_type,day_count,start_time,ent_time,data_time,sign_time,to_sample_time,money,residual_type,
+        residual_time,moeny_time,content,status,sample_type,to_subcontract,determine,standard_method,
+        create_time,create_by,update_time,update_by
+    </sql>
+
+    <select id="getById" resultMap="BaseResultMap">
+      SELECT <include refid="Base_Column_List"/>
+      FROM entrust_info
+      WHERE id = #{id}
+    </select>
+
+    <select id="findList" resultMap="BaseResultMapResult">
+      SELECT <include refid="Base_Column_List"/>
+      FROM entrust_info
+      ORDER BY create_time DESC
+    </select>
+
+</mapper>

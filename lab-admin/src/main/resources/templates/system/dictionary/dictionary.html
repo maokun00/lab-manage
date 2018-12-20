@@ -1,0 +1,35 @@
+@layout("/common/_container.html"){
+<div class="row">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>字典管理</h5>
+            </div>
+            <div class="ibox-content">
+                <div class="row row-lg">
+                    <div class="col-sm-3">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search for...">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" clickFun="Dictionary.search()" type="button">搜索</button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="hidden-xs col-sm-3" id="menuTableToolbar">
+                            @if(shiro.hasPermission("sys:dictionary:add")){
+                                <button type="button" class="btn btn-primary" onclick="Dictionary.openAddDictionary()">添  加</button>
+                            @}
+                            @if(shiro.hasPermission("sys:dictionary:edit")){
+                                <button type="button" class="btn btn-primary" onclick="Dictionary.openChangeDictionary()">修改</button>
+                            @}
+                        </div>
+                        <table id="DictionaryTable"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/system/dictionary/dictionary.js"></script>
+@}

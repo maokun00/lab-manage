@@ -1,7 +1,10 @@
 package com.lab.manage.util;
 
+import com.lab.manage.domain.Company;
+import com.lab.manage.domain.Member;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 
 import javax.crypto.Cipher;
 import java.io.ByteArrayOutputStream;
@@ -85,6 +88,7 @@ public class EncryptionUtil {
      * @return
      */
     public static String publicEncrypt(String data, RSAPublicKey publicKey){
+        if(StringUtils.isBlank(data)) return null;
         try{
             Cipher cipher = Cipher.getInstance(RSA_ALGORITHM);
             cipher.init(Cipher.ENCRYPT_MODE, publicKey);
@@ -102,6 +106,7 @@ public class EncryptionUtil {
      */
 
     public static String privateDecrypt(String data, RSAPrivateKey privateKey){
+        if(StringUtils.isBlank(data)) return null;
         try{
             Cipher cipher = Cipher.getInstance(RSA_ALGORITHM);
             cipher.init(Cipher.DECRYPT_MODE, privateKey);
@@ -173,6 +178,40 @@ public class EncryptionUtil {
         byte[] resultDatas = out.toByteArray();
         IOUtils.closeQuietly(out);
         return resultDatas;
+    }
+
+    public static Member encryptionMember(Member member, String publicKey) throws InvalidKeySpecException, NoSuchAlgorithmException {
+        String companyName = EncryptionUtil.publicEncrypt(member.getCompanyName(), EncryptionUtil.getPublicKey(publicKey));
+        String email = EncryptionUtil.publicEncrypt(member.getEmail(), EncryptionUtil.getPublicKey(publicKey));
+        String fax = EncryptionUtil.publicEncrypt(member.getFax(), EncryptionUtil.getPublicKey(publicKey));
+        String location = EncryptionUtil.publicEncrypt(member.getLocation(), EncryptionUtil.getPublicKey(publicKey));
+        String mobile = EncryptionUtil.publicEncrypt(member.getMobile(), EncryptionUtil.getPublicKey(publicKey));
+        String name = EncryptionUtil.publicEncrypt(member.getName(), EncryptionUtil.getPublicKey(publicKey));
+        member.setCompanyName(companyName);
+        member.setEmail(email);
+        member.setFax(fax);
+        member.setCompanyName(companyName);
+        member.setLocation(location);
+        member.setMobile(mobile);
+        member.setName(name);
+        return member;
+    }
+
+    public static Member checkMember(Member member, String privateKey) throws InvalidKeySpecException, NoSuchAlgorithmException {
+        String companyName = EncryptionUtil.privateDecrypt(member.getCompanyName(), EncryptionUtil.getPrivateKey(privateKey));
+        String email = EncryptionUtil.privateDecrypt(member.getEmail(), EncryptionUtil.getPrivateKey(privateKey));
+        String fax = EncryptionUtil.privateDecrypt(member.getFax(), EncryptionUtil.getPrivateKey(privateKey));
+        String location = EncryptionUtil.privateDecrypt(member.getLocation(), EncryptionUtil.getPrivateKey(privateKey));
+        String mobile = EncryptionUtil.privateDecrypt(member.getMobile(), EncryptionUtil.getPrivateKey(privateKey));
+        String name = EncryptionUtil.privateDecrypt(member.getName(), EncryptionUtil.getPrivateKey(privateKey));
+        member.setCompanyName(companyName);
+        member.setEmail(email);
+        member.setFax(fax);
+        member.setCompanyName(companyName);
+        member.setLocation(location);
+        member.setMobile(mobile);
+        member.setName(name);
+        return member;
     }
 
     /** =============================== RSA =================================== */

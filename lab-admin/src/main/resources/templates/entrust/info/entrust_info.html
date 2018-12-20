@@ -1,0 +1,36 @@
+@layout("/common/_container.html"){
+<div class="row">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>委托信息</h5>
+            </div>
+            <div class="ibox-content">
+                <div class="row row-lg">
+                    <div class="col-sm-3">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search for...">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" clickFun="Entrust.search()" type="button">搜索</button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="hidden-xs col-sm-3" id="menuTableToolbar">
+                            @if(shiro.hasPermission("sys:role:add")){
+                                <button type="button" class="btn btn-primary" onclick="Entrust.openAddEntrust()">添  加</button>
+                            @}
+                            @if(shiro.hasPermission("sys:role:edit")){
+                                <button type="button" class="btn btn-primary" onclick="Entrust.openChangeEntrust()">修改</button>
+                            @}
+                        </div>
+                        <table id="EntrustTable"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="${ctxPath}/static/modular/entrust/entrust.js"></script>
+@}

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lab.manage.mapper.SysDictionaryMapper">
+
+    <select id="findList" resultType="com.lab.manage.result.SysDictionaryResult">
+        SELECT id,`name`,`type`,`value`,`order`,`label`,create_time createTime,create_by createBy
+        FROM sys_dictionary
+        <where>
+            <if test="name != null and name != ''">AND `name` = #{name}</if>
+        </where>
+        ORDER BY create_time DESC
+    </select>
+
+    <select id="findById" resultType="com.lab.manage.result.SysDictionaryResult">
+        SELECT id,`name`,`type`,`value`,`order`,`label`,create_time createTime,create_by createBy
+        FROM sys_dictionary
+        WHERE id = #{id}
+    </select>
+
+    <select id="findByType" resultType="com.lab.manage.domain.SysDictionary">
+        SELECT id,`name`,`type`,`value`,`order`,`label`,create_time createTime,create_by createBy
+        FROM sys_dictionary
+        WHERE `type` = #{type}
+    </select>
+
+
+</mapper>
