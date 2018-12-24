@@ -14,4 +14,6 @@ import java.util.List;
 public interface EntrustInfoMapper extends BaseMapper<EntrustInfoPojo>{
 
     List<EntrustResult> findList(EntrustForm entrustForm);
+
+    EntrustResult findById(Long id);
 }

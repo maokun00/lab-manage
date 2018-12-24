@@ -2,6 +2,8 @@ package com.lab.manage.service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.lab.manage.domain.EntrustInfo;
+import com.lab.manage.domain.EntrustReport;
 import com.lab.manage.domain.Member;
 import com.lab.manage.domain.SysDictionary;
 import com.lab.manage.enums.Dictionary;
@@ -40,22 +42,54 @@ public class EntrustService {
     @Autowired
     private EntrustReportMapper entrustReportMapper;
 
+    /**
+     * @Author Chengcheng
+     * @Description : 根据id获取委托基本信息
+     * @Date 2018/12/21 下午4:46  
+     */
+    @RequestMapping("/findById")
+    public EntrustInfo findById(@RequestParam("id") Long id){
+        return entrustInfoMapper.selectById(id);
+    }
+
+    /**
+     * @Author Chengcheng
+     * @Description : 根据关键字获取字典数据
+     * @Date 2018/12/21 下午4:46  
+     */
     @RequestMapping("/findType")
     public List<SysDictionary> findType(@RequestParam("type") String type){
         return sysDictionaryMapper.findByType(type);
     }
 
+    /**
+     * @Author Chengcheng
+     * @Description : 根据关键字列表获取字典数据集合
+     * @Date 2018/12/21 下午4:46
+     */
+    @RequestMapping("/findTypes")
+    public List<SysDictionary> findTypes(@RequestParam("types") String[] stringArray){
+        return sysDictionaryMapper.findTypes(stringArray);
+    }
+
+    /**
+     * @Author Chengcheng
+     * @Description : 获取委托信息列表
+     * @Date 2018/12/21 下午4:46
+     */
     @RequestMapping("/findList")
     public Object findList(@RequestBody EntrustForm entrustForm){
         PageHelper.startPage(entrustForm.getOffset(),entrustForm.getLimit());
         List<EntrustResult> results = entrustInfoMapper.findList(entrustForm);
         results.forEach(result -> {
-            MemberPojo memberPojo = memberMapper.selectById(result.getId());
+            MemberPojo memberPojo = memberMapper.selectById(result.getMemberId());
             CompanyPojo companyPojo = companyMapper.selectById(memberPojo.getSysCompanyId());
             SysDictionaryPojo detection = sysDictionaryMapper.selectById(result.getDetectionType());
             SysDictionaryPojo service = sysDictionaryMapper.selectById(result.getServiceType());
+            SysDictionaryPojo sampleType = sysDictionaryMapper.selectById(result.getSampleType());
             result.setDetectionTypeStr(detection.getLabel());
             result.setServiceTypeStr(service.getLabel());
+            result.setSampleTypeStr(sampleType.getLabel());
             Member member = null;
             try {
                 member = EncryptionUtil.checkMember(memberPojo, companyPojo.getPrivateKey());
@@ -69,18 +103,52 @@ public class EntrustService {
         return new PageInfo(results);
     }
 
+    /**
+     * @Author Chengcheng
+     * @Description : 获取委托信息全部数据
+     * @Date 2018/12/21 下午4:46
+     */
+    @RequestMapping("/findResultById")
+    public EntrustResult findResultById(@RequestParam("id") Long id){
+        EntrustResult result = entrustInfoMapper.findById(id);
+        MemberPojo memberPojo = memberMapper.selectById(result.getMemberId());
+        MemberPojo unionMemberPojo = memberMapper.selectById(result.getUnionMemberId());
+        EntrustReport report = entrustReportMapper.findByInfoId(result.getId());
+        CompanyPojo companyPojo = companyMapper.selectById(memberPojo.getSysCompanyId());
+        try {
+            Member member = EncryptionUtil.checkMember(memberPojo,companyPojo.getPrivateKey());
+            Member unionMember = EncryptionUtil.checkMember(unionMemberPojo,companyPojo.getPrivateKey());
+            result.setMember(member);
+            result.setUnionMember(unionMember);
+        }catch (Exception e){}
+        result.setReport(report);
+        return result;
+    }
+
+    /**
+     * @Author Chengcheng
+     * @Description : 新增委托信息
+     * @Date 2018/12/21 下午4:46
+     */
     @RequestMapping("/add")
     @Transactional
     public void addEntrust(@RequestBody EntrustResult entrustResult){
         //用户信息
         checkMember(entrustResult);
         //添加委托基本信息
-        entrustInfoMapper.insert(new EntrustInfoPojo(entrustResult));
+        EntrustInfoPojo entrustInfoPojo = new EntrustInfoPojo(entrustResult);
+        entrustInfoMapper.insert(entrustInfoPojo);
+        entrustResult.setId(entrustInfoPojo.getId());
         //添加委托报告信息
         entrustReportMapper.insert(merge(entrustResult));
 
     }
 
+    /**
+     * @Author Chengcheng
+     * @Description : 修改委托信息
+     * @Date 2018/12/21 下午4:46
+     */
     @RequestMapping("/edit")
     @Transactional
     public void editEntrust(@RequestBody EntrustResult entrustResult){
@@ -91,19 +159,19 @@ public class EntrustService {
     }
 
     private void checkMember(EntrustResult entrustResult){
-        Member unionMember = memberMapper.findByCompanyName(entrustResult.getUnionCompanyName());
-        Member member = memberMapper.findByCompanyName(entrustResult.getCompanyName());
         //添加或修改 受检单位信息
         Member unionDataMember = merge(entrustResult,true);
-        memberMerge(unionMember,unionDataMember,entrustResult.getSysCompanyId());
+        Member memberMerge = memberMerge(unionDataMember, entrustResult.getSysCompanyId());
+        entrustResult.setUnionMemberId(memberMerge.getId());
         //添加或修改 委托单位信息
         Member dataMember = merge(entrustResult,false);
-        memberMerge(member,dataMember,entrustResult.getSysCompanyId());
+        Member memberMerge1 = memberMerge(dataMember, entrustResult.getSysCompanyId());
+        entrustResult.setMemberId(memberMerge1.getId());
     }
 
     private EntrustReportPojo merge(EntrustResult entrustResult){
         EntrustReportPojo entrustReport = new EntrustReportPojo();
-        entrustReport.setEntrustInfoId(entrustReport.getId());
+        entrustReport.setEntrustInfoId(entrustResult.getId());
         entrustReport.setId(entrustResult.getReportId());
         entrustReport.setName(entrustResult.getReportName());
         entrustReport.setMobile(entrustResult.getReportMobile());
@@ -120,11 +188,15 @@ public class EntrustService {
     private Member merge(EntrustResult entrustResult,boolean isUnion){
         Member dataMember = new Member();
         if(isUnion){
+            dataMember.setId(entrustResult.getUnionMemberId());
+            dataMember.setCompanyName(entrustResult.getCompanyName());
             dataMember.setName(entrustResult.getUnionMemberName());
             dataMember.setMobile(entrustResult.getUnionMemberMobile());
             dataMember.setLocation(entrustResult.getUnionMemberLocation());
             dataMember.setCityId(entrustResult.getUnionCityId());
         }else{
+            dataMember.setId(entrustResult.getMemberId());
+            dataMember.setCompanyName(entrustResult.getCompanyName());
             dataMember.setName(entrustResult.getMemberName());
             dataMember.setMobile(entrustResult.getMemberMobile());
             dataMember.setLocation(entrustResult.getMemberLocation());
@@ -136,18 +208,19 @@ public class EntrustService {
         return dataMember;
     }
 
-    private void memberMerge(Member member,Member dataMember, Integer sysCompanyId){
-        CompanyResult company = companyMapper.findById(member.getSysCompanyId());
+    private Member memberMerge(Member dataMember, Integer sysCompanyId){
+        CompanyPojo companyPojo = companyMapper.selectById(sysCompanyId);
         try {
-            dataMember = EncryptionUtil.encryptionMember(dataMember,company.getPublicKey());
+            dataMember = EncryptionUtil.encryptionMember(dataMember,companyPojo.getPublicKey());
         } catch (Exception e){}
-        if(company != null && company.getId().equals(sysCompanyId)){
-            dataMember.setId(member.getId());
-            memberMapper.updateById(new MemberPojo(dataMember));
+        dataMember.setSysCompanyId(sysCompanyId);
+        MemberPojo memberPojo = new MemberPojo(dataMember);
+        if(memberPojo.getId() != null){
+            memberMapper.updateById(memberPojo);
         }else{
-            dataMember.setSysCompanyId(sysCompanyId);
-            memberMapper.insert(new MemberPojo(dataMember));
+            memberMapper.insert(memberPojo);
         }
+        return memberPojo;
     }
 
 }

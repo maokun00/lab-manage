@@ -13,7 +13,10 @@ public class MemberPojo extends Member {
     }
 
     public MemberPojo(Member member) {
+        this.setLocation(member.getLocation());
         this.setCityId(member.getCityId());
+        this.setFax(member.getFax());
+        this.setEmail(member.getEmail());
         this.setId(member.getId());
         this.setCompanyName(member.getCompanyName());
         this.setSource(member.getSource());

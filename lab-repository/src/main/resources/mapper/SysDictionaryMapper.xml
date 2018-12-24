@@ -23,5 +23,20 @@
         WHERE `type` = #{type}
     </select>
 
+    <select id="findTypes" resultType="com.lab.manage.domain.SysDictionary">
+        SELECT id,`name`,`type`,`value`,`order`,`label`
+        FROM sys_dictionary
+        WHERE `type` IN 
+        <foreach collection="types" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="findByTypeAndValue" resultType="com.lab.manage.domain.SysDictionary">
+        SELECT id,`name`,`type`,`value`,`order`,`label`
+        FROM sys_dictionary
+        WHERE `type` = #{type} AND `value` = #{value}
+    </select>
+
 
 </mapper>

@@ -23,6 +23,9 @@
                             @if(shiro.hasPermission("sys:role:edit")){
                                 <button type="button" class="btn btn-primary" onclick="Entrust.openChangeEntrust()">修改</button>
                             @}
+                            @if(shiro.hasPermission("sys:role:edit")){
+                                <button type="button" class="btn btn-danger" onclick="Entrust.openSample()">检测项目</button>
+                            @}
                         </div>
                         <table id="EntrustTable"/>
                     </div>

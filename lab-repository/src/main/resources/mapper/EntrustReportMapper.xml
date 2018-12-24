@@ -2,6 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.lab.manage.mapper.EntrustReportMapper">
 
-
+    <select id="findByInfoId" resultType="com.lab.manage.domain.EntrustReport">
+        SELECT id,`name`,mobile,language_type languageType,report_type reportType,content,`count`,mode_type modeType,reporting_unit reportingUnit,
+               location,entrust_info_id entrustInfoId
+        FROM entrust_report
+        WHERE entrust_info_id = #{id}
+    </select>
 
 </mapper>

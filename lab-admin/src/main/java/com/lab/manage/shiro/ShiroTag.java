@@ -14,7 +14,6 @@ import java.util.Map;
  */
 public class ShiroTag {
 
-
     public boolean isEmpty(List list){
         return list.isEmpty();
     }

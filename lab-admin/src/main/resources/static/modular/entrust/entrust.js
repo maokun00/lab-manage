@@ -21,6 +21,7 @@ Entrust.initColumn = function () {
         {title: '签订日期', field: 'signTimeStr', align: 'center', valign: 'middle', sortable: true},
         {title: '服务类型', field: 'serviceTypeStr', align: 'center', valign: 'middle', sortable: true},
         {title: '检测类型', field: 'detectionTypeStr', align: 'center', valign: 'middle', sortable: true},
+        {title: '采样类型', field: 'sampleTypeStr', align: 'center', valign: 'middle', sortable: true},
         {title: '应出报告日期', field: 'entTimeStr', align: 'center', valign: 'middle', sortable: true},
         {title: '下单时间', field: 'createTimeStr', align: 'center', valign: 'middle', sortable: true}]
     return columns;
@@ -48,13 +49,27 @@ Entrust.openAddEntrust = function () {
 
     var index = layer.open({
         type: 2,
-        title: '添加菜单',
+        title: '新增委托',
         area: ['800px', '450px'], //宽高
         fix: false, //不固定
         maxmin: true,
         content: Feng.ctxPath + '/entrust/entrust_add'
     });
     this.layerIndex = index;
+};
+
+Entrust.openSample = function () {
+    if (this.check()) {
+        var index = layer.open({
+            type: 2,
+            title: '检测项目',
+            area: ['1200px', '600px'], //宽高
+            fix: false, //不固定
+            maxmin: true,
+            content: Feng.ctxPath + '/entrust/entrust_sample/' + this.seItem.id
+        });
+        this.layerIndex = index;
+    }
 };
 
 /**
@@ -64,7 +79,7 @@ Entrust.openChangeEntrust = function () {
     if (this.check()) {
         var index = layer.open({
             type: 2,
-            title: '修改菜单',
+            title: '修改委托',
             area: ['800px', '450px'], //宽高
             fix: false, //不固定
             maxmin: true,

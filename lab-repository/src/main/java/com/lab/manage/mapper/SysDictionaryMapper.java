@@ -5,6 +5,7 @@ import com.lab.manage.domain.SysDictionary;
 import com.lab.manage.form.SysDictionaryForm;
 import com.lab.manage.pojo.SysDictionaryPojo;
 import com.lab.manage.result.SysDictionaryResult;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -18,4 +19,8 @@ public interface SysDictionaryMapper extends BaseMapper<SysDictionaryPojo>{
     SysDictionaryResult findById(Integer id);
 
     List<SysDictionary> findByType(String type);
+
+    List<SysDictionary> findTypes(@Param("types") String[] stringArray);
+
+    SysDictionary findByTypeAndValue(@Param("type") String type, @Param("value") String value);
 }

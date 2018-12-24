@@ -1,23 +1,353 @@
 @layout("/common/_container.html"){
 <div class="ibox float-e-margins">
     <div class="ibox-content">
-        <form id="roleForm">
-            <input type="hidden" name="id" value="${role.id}">
-            <div class="form-horizontal" id="menuInfoForm">
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="form-group">
-                            <label for="name" class="control-label">角色名称:</label>
-                            <input type="text" class="form-control" id="name" name="name" value="${role.name}">
-                        </div>
+        <form class="form-horizontal" id="entrustForm">
+            <input type="hidden" name="id" value="${result.id}"/>
+            <input type="hidden" name="memberId" value="${result.memberId}"/>
+            <input type="hidden" name="unionMemberId" value="${result.unionMemberId}"/>
+            <input type="hidden" name="reportId" value="${result.reportId}"/>
+            <fieldset>
+                <legend>委托单位:</legend>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="companyName">委托单位名称</label>
+                    <div class="col-sm-4">
+                        <input class="form-control" id="companyName" name="companyName" value="${result.companyName}" type="text"/>
+                    </div>
+                    <label class="col-sm-2 control-label" for="memberName">联系人</label>
+                    <div class="col-sm-4">
+                        <input class="form-control" id="memberName" name="memberName" value="${result.memberName}" type="text" />
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary"  onclick="RoleInfoDlg.editSubmit()">Save changes</button>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="memberMobile">联系电话</label>
+                    <div class="col-sm-4">
+                        <input class="form-control" id="memberMobile" name="memberMobile" value="${result.memberMobile}" type="text" />
+                    </div>
+                    <label class="col-sm-2 control-label" for="email">联系邮箱</label>
+                    <div class="col-sm-4">
+                        <input class="form-control" id="email" name="email" type="text" value="${result.email}" placeholder="msh"/>
+                    </div>
                 </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="fax">传真</label>
+                    <div class="col-sm-4">
+                        <input class="form-control" id="fax" name="fax" value="${result.fax}" type="text" />
+                    </div>
+                    <label class="col-sm-2 control-label" for="cityId">省、市、区</label>
+                    <div class="col-sm-4">
+                        <input class="form-control" id="cityId" name="cityId" value="${result.cityId}" type="text" placeholder="msh"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="memberLocation">街道</label>
+                    <div class="col-sm-4">
+                        <input class="form-control" id="memberLocation" name="memberLocation" value="${result.memberLocation}" type="text" />
+                    </div>
+                    <label class="col-sm-2 control-label" for="memberSource">客户来源</label>
+                    <div class="col-sm-4">
+                        <input class="form-control" id="memberSource" name="memberSource" value="${result.memberSource}" type="text"/>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend>受检单位:</legend>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="unionCompanyName">受检单位名称</label>
+                    <div class="col-sm-4">
+                        <input class="form-control" id="unionCompanyName" name="unionCompanyName" value="${result.unionCompanyName}" type="text"/>
+                    </div>
+                    <label class="col-sm-2 control-label" for="unionMemberName">联系人</label>
+                    <div class="col-sm-4">
+                        <input class="form-control" id="unionMemberName" name="unionMemberName" value="${result.unionMemberName}" type="text" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="unionMemberMobile">联系电话</label>
+                    <div class="col-sm-4">
+                        <input class="form-control" id="unionMemberMobile" name="unionMemberMobile" value="${result.unionMemberMobile}" type="text" />
+                    </div>
+                    <label class="col-sm-2 control-label" for="unionCityId">省、市、区</label>
+                    <div class="col-sm-4">
+                        <input class="form-control" id="unionCityId" name="unionCityId" type="text" value="${result.unionCityId}" placeholder="msh"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="unionMemberLocation">街道</label>
+                    <div class="col-sm-4">
+                        <input class="form-control" id="unionMemberLocation" name="unionMemberLocation" value="${result.unionMemberLocation}" type="text" />
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend>委托基本信息</legend>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="name">委托项目</label>
+                    <div class="col-sm-4">
+                        <input class="form-control" id="name" name="name" value="${result.name}" type="text" />
+                    </div>
+                    <label class="col-sm-2 control-label" for="num">委托编号</label>
+                    <div class="col-sm-4">
+                        <input class="form-control" id="num" name="num" value="${result.num}" type="text" placeholder="留空白可自动生成"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="detectionType">检测类型</label>
+                    <div class="col-sm-4">
+                        <select id="detectionType" name="detectionType" class="form-control">
+                            @for(detection in detectionType){
+                            <option value="${detection.id}"
+                                @if(result.detectionType == detection.id){
+                                    selected="selected"
+                                @}
+                            >${detection.label}</option>
+                            @}
+                        </select>
+                    </div>
+                    <label class="col-sm-2 control-label" for="source">委托来源</label>
+                    <div class="col-sm-4">
+                        <input class="form-control" id="source" name="source" value="${result.source}" type="text" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="detectionPurpose">检验目的</label>
+                    <div class="col-sm-4">
+                        <input class="form-control" id="detectionPurpose" name="detectionPurpose" value="${result.detectionPurpose}" type="text" placeholder="root"/>
+                    </div>
+                    <label class="col-sm-2 control-label" for="aptitudeType">所需资质</label>
+                    <div class="col-sm-4">
+                        <select id="aptitudeType" name="aptitudeType" class="form-control selectpicker">
+                            @for(aptitude in aptitudeType){
+                            <option value="${aptitude.id}"
+                                @if(aptitude.id == result.aptitudeType){
+                                    selected="selected"
+                                @}
+                            >${aptitude.label}</option>
+                            @}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="serviceType">服务类型</label>
+                    <div class="col-sm-4">
+                        <select id="serviceType" name="serviceType" class="form-control">
+                            @for(service in serviceType){
+                            <option value="${service.id}"
+                                @if(service.id == result.serviceType){
+                                    selected="selected"
+                                @}
+                            >${service.label}</option>
+                            @}
+                        </select>
+                    </div>
+                    <label class="col-sm-2 control-label" for="dayCount">执行期限（天）</label>
+                    <div class="col-sm-4">
+                        <input class="form-control" id="dayCount" name="dayCount" value="${result.dayCount}" type="text" placeholder="1（天）"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="startTime">预计开始时间</label>
+                    <div class="col-sm-4">
+                        <input class="form-control form_datetime" id="startTime" name="startTime" value="${result.startTimeStr}" readonly type="text" />
+                    </div>
+                    <label class="col-sm-2 control-label" for="entTime">预计出报告时间</label>
+                    <div class="col-sm-4">
+                        <input class="form-control form_datetime" id="entTime" name="entTime" value="${result.entTimeStr}" readonly type="text" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="dataTime">数据出具日期</label>
+                    <div class="col-sm-4">
+                        <input class="form-control form_datetime" id="dataTime" name="dataTime" value="${result.dataTimeStr}" readonly type="text" />
+                    </div>
+                    <label class="col-sm-2 control-label" for="signTime">签订日期</label>
+                    <div class="col-sm-4">
+                        <input class="form-control form_datetime" id="signTime" name="signTime" value="${result.signTimeStr}" readonly type="text" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="toSampleTime">到样日期</label>
+                    <div class="col-sm-4">
+                        <input class="form-control form_datetime" id="toSampleTime" name="toSampleTime" value="${result.toSampleTimeStr}" readonly type="text" />
+                    </div>
+                    <label class="col-sm-2 control-label" for="money">委托金额</label>
+                    <div class="col-sm-4">
+                        <input class="form-control" id="money" name="money" value="${result.moneyStr}" type="text" placeholder="100.25"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="residualType">余样处置</label>
+                    <div class="col-sm-4">
+                        <select id="residualType" name="residualType" class="form-control">
+                            @for(residual in residualType){
+                            <option value="${residual.id}"
+                                @if(residual.id == result.residualType){
+                                    selected="selected"
+                                @}
+                            >${residual.label}</option>
+                            @}
+                        </select>
+                    </div>
+                    <label class="col-sm-2 control-label" for="residualTime">留样时间</label>
+                    <div class="col-sm-4">
+                        <input class="form-control form_datetime" id="residualTime" name="residualTime" value="${result.residualTimeStr}" readonly type="text" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="moenyTime">最晚付款时间</label>
+                    <div class="col-sm-4">
+                        <input class="form-control form_datetime" id="moenyTime" name="moenyTime" value="${result.moenyTimeStr}" readonly type="text" />
+                    </div>
+                    <label class="col-sm-2 control-label" for="sampleType">采样类型</label>
+                    <div class="col-sm-4">
+                        <select id="sampleType" name="sampleType" class="form-control">
+                            @for(sample in sampleType){
+                            <option value="${sample.id}"
+                                @if(sample.id == result.sampleType){
+                                    selected="selected"
+                                @}
+                            >${sample.label}</option>
+                            @}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="toSubcontract">是否分包</label>
+                    <div class="col-sm-4">
+                        <select class="form-control" id="toSubcontract" name="toSubcontract">
+                            <option value="1"
+                                @if(result.sampleType == 1){
+                                        selected="selected"
+                                @}
+                            >是</option>
+                            <option value="2"
+                                @if(result.sampleType == 2){
+                                    selected="selected"
+                                @}
+                            >否</option>
+                        </select>
+                    </div>
+                    <label class="col-sm-2 control-label" for="determine">是否判定</label>
+                    <div class="col-sm-4">
+                        <select class="form-control" id="determine" name="determine">
+                            <option value="1"
+                                    @if(result.determine == 1){
+                                    selected="selected"
+                                    @}
+                            >是</option>
+                            <option value="2"
+                                    @if(result.determine == 2){
+                                    selected="selected"
+                                    @}
+                            >否</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="standardMethod">使用非标方法</label>
+                    <div class="col-sm-4">
+                        <select class="form-control" id="standardMethod" name="standardMethod">
+                            <option value="1"
+                                    @if(result.standardMethod == 1){
+                                    selected="selected"
+                                    @}
+                            >是</option>
+                            <option value="2"
+                                    @if(result.standardMethod == 2){
+                                    selected="selected"
+                                    @}
+                            >否</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="content">备注</label>
+                    <div class="col-sm-10">
+                        <textarea class="form-control" id="content" name="content" >${result.companyName}</textarea>
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>报告要求信息：</legend>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="languageType">报告语言</label>
+                    <div class="col-sm-4">
+                        <select id="languageType" name="languageType" class="form-control">
+                            @for(language in languageType){
+                            <option value="${language.id}"
+                                @if(language.id == result.languageType){
+                                    selected="selected"
+                                @}
+                            >${language.label}</option>
+                            @}
+                        </select>
+                    </div>
+                    <label class="col-sm-2 control-label" for="reportType">报告类别</label>
+                    <div class="col-sm-4">
+                        <select id="reportType" name="reportType" class="form-control">
+                            @for(report in reportType){
+                            <option value="${report.id}"
+                                @if(report.id == result.reportType){
+                                    selected="selected"
+                                @}
+                            >${report.label}</option>
+                            @}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="reportContent">报告要求</label>
+                    <div class="col-sm-4">
+                        <input class="form-control" id="reportContent" name="reportContent" value="${result.reportContent}" type="text"/>
+                    </div>
+                    <label class="col-sm-2 control-label" for="reportCount">报告数量</label>
+                    <div class="col-sm-4">
+                        <input class="form-control" id="reportCount" name="reportCount" value="${result.reportCount}" type="text"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="reportLocation">取报告地址</label>
+                    <div class="col-sm-4">
+                        <input class="form-control" id="reportLocation" name="reportLocation" value="${result.reportLocation}" type="text"/>
+                    </div>
+                    <label class="col-sm-2 control-label" for="reportingUnit">取报告单位</label>
+                    <div class="col-sm-4">
+                        <input class="form-control" id="reportingUnit" name="reportingUnit" value="${result.reportingUnit}" type="text"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="modeType">取报告方式</label>
+                    <div class="col-sm-4">
+                        <select id="modeType" name="modeType" class="form-control">
+                            @for(mode in modeType){
+                            <option value="${mode.id}"
+                                @if(mode.id == result.modeType){
+                                    selected="selected"
+                                @}
+                            >${mode.label}</option>
+                            @}
+                        </select>
+                    </div>
+                    <label class="col-sm-2 control-label" for="reportName">收件人</label>
+                    <div class="col-sm-4">
+                        <input class="form-control" id="reportName" name="reportName" value="${result.reportName}" type="text"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="reportMobile">收件人电话</label>
+                    <div class="col-sm-4">
+                        <input class="form-control" id="reportMobile" name="reportMobile" value="${result.reportMobile}" type="text"/>
+                    </div>
+                </div>
+            </fieldset>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary"  onclick="EntrustInfoDlg.editSubmit()">Save changes</button>
             </div>
         </form>
     </div>
 </div>
-<script src="${ctxPath}/static/modular/system/role/role_info.js"></script>
+<script type="text/javascript">
+    $(".form_datetime").datetimepicker({format: 'yyyy-mm-dd hh:ii:ss'});
+</script>
+<script src="${ctxPath}/static/modular/entrust/entrust_info.js"></script>
 @}

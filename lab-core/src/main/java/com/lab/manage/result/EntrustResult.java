@@ -3,6 +3,7 @@ package com.lab.manage.result;
 import com.lab.manage.domain.*;
 import com.lab.manage.util.DateUtil;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -13,6 +14,7 @@ public class EntrustResult extends EntrustInfo{
 
     private String detectionTypeStr;
     private String serviceTypeStr;
+    private String sampleTypeStr;
     private Integer sysCompanyId;
 
     /** ===========报告参数============ */
@@ -51,6 +53,30 @@ public class EntrustResult extends EntrustInfo{
     private Integer cityId;
     private String memberLocation;
     /** ===========委托单位参数============ */
+
+    public String getStartTimeStr(){
+        return DateUtil.formatDateTime(this.getStartTime());
+    }
+
+    public String getDataTimeStr(){
+        return DateUtil.formatDateTime(this.getDataTime());
+    }
+
+    public String getToSampleTimeStr(){
+        return DateUtil.formatDateTime(this.getToSampleTime());
+    }
+
+    public String getMoneyStr(){
+        return getMoney() == null?"":getMoney().setScale(2, BigDecimal.ROUND_HALF_UP).toString();
+    }
+
+    public String getResidualTimeStr(){
+        return DateUtil.formatDateTime(this.getResidualTime());
+    }
+
+    public String getMoenyTimeStr(){
+        return DateUtil.formatDateTime(this.getMoenyTime());
+    }
 
     public String getSignTimeStr(){
         return DateUtil.formatDateTime(this.getSignTime());
@@ -270,5 +296,45 @@ public class EntrustResult extends EntrustInfo{
 
     public void setReportId(Long reportId) {
         this.reportId = reportId;
+    }
+
+    public String getSampleTypeStr() {
+        return sampleTypeStr;
+    }
+
+    public void setSampleTypeStr(String sampleTypeStr) {
+        this.sampleTypeStr = sampleTypeStr;
+    }
+
+    public void setMember(Member member) {
+        this.companyName = member.getCompanyName();
+        this.memberName = member.getName();
+        this.memberMobile = member.getMobile();
+        this.email = member.getEmail();
+        this.fax = member.getFax();
+        this.memberSource = member.getSource();
+        this.cityId = member.getCityId();
+        this.memberLocation = member.getLocation();
+    }
+
+    public void setUnionMember(Member unionMember) {
+        this.unionCompanyName = unionMember.getCompanyName();
+        this.unionMemberName = unionMember.getName();
+        this.unionMemberMobile = unionMember.getMobile();
+        this.unionCityId = unionMember.getCityId();
+        this.unionMemberLocation = unionMember.getLocation();
+    }
+
+    public void setReport(EntrustReport report) {
+        this.reportId = report.getId();
+        this.reportName = report.getName();
+        this.reportMobile = report.getMobile();
+        this.languageType = report.getLanguageType();
+        this.reportType = report.getReportType();
+        this.reportContent = report.getContent();
+        this.reportCount = report.getCount();
+        this.modeType = report.getModeType();
+        this.reportingUnit = report.getReportingUnit();
+        this.reportLocation = report.getLocation();
     }
 }

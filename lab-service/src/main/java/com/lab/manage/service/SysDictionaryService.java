@@ -25,7 +25,11 @@ public class SysDictionaryService {
     @Autowired
     private SysDictionaryMapper sysDictionaryMapper;
 
-
+    /**
+     * @Author Chengcheng
+     * @Description : 获取字典列表
+     * @Date 2018/12/21 下午4:46
+     */
     @RequestMapping("/findList")
     public Object findList(@RequestBody SysDictionaryForm form){
         PageHelper.startPage(form.getOffset(),form.getLimit());
@@ -33,16 +37,31 @@ public class SysDictionaryService {
         return new PageInfo<>(resultList);
     }
 
+    /**
+     * @Author Chengcheng
+     * @Description : 查询字典信息
+     * @Date 2018/12/21 下午4:46
+     */
     @RequestMapping("/findById")
     public SysDictionaryResult findById(@RequestParam("id") Integer id){
         return sysDictionaryMapper.findById(id);
     }
 
+    /**
+     * @Author Chengcheng
+     * @Description : 添加字典
+     * @Date 2018/12/21 下午4:46
+     */
     @RequestMapping("/addDictionary")
     public void addDictionary(@RequestBody SysDictionary sysDictionary){
         sysDictionaryMapper.insert(new SysDictionaryPojo(sysDictionary));
     }
 
+    /**
+     * @Author Chengcheng
+     * @Description : 修改字典
+     * @Date 2018/12/21 下午4:46
+     */
     @RequestMapping("/editDictionary")
     public void editDictionary(@RequestBody SysDictionary sysDictionary){
         sysDictionaryMapper.updateById(new SysDictionaryPojo(sysDictionary));

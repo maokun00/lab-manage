@@ -44,7 +44,7 @@
         create_time,create_by,update_time,update_by
     </sql>
 
-    <select id="getById" resultMap="BaseResultMap">
+    <select id="findById" resultMap="BaseResultMapResult">
       SELECT <include refid="Base_Column_List"/>
       FROM entrust_info
       WHERE id = #{id}
@@ -53,6 +53,7 @@
     <select id="findList" resultMap="BaseResultMapResult">
       SELECT <include refid="Base_Column_List"/>
       FROM entrust_info
+      WHERE status = 1
       ORDER BY create_time DESC
     </select>
 
